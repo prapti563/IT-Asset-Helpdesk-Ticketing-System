@@ -1,0 +1,778 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ asset.asset_name }} | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.asset-detail-page {
+    max-width: 1220px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ================= HEADER ================= */
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.detail-header h1 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 30px;
+    font-weight: 750;
+}
+
+.detail-header p {
+    margin-top: 7px;
+    color: #64748b;
+}
+
+.back-btn {
+    text-decoration: none;
+    background: white;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+    padding: 11px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #f8fafc;
+    transform: translateY(-1px);
+}
+
+
+/* ================= GRID ================= */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.45fr;
+    gap: 22px;
+}
+
+
+/* ================= CARDS ================= */
+
+.detail-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 12px 35px rgba(15,23,42,0.07);
+}
+
+
+/* ================= ASSET PREVIEW ================= */
+
+.asset-image {
+    height: 250px;
+    border-radius: 15px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(96,165,250,0.35),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #eff6ff
+        );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.asset-image::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border: 1px solid rgba(37,99,235,0.12);
+    border-radius: 50%;
+}
+
+.asset-icon {
+    font-size: 85px;
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ================= NAME ================= */
+
+.asset-name {
+    font-size: 25px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 7px;
+}
+
+.asset-id {
+    color: #64748b;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+
+/* ================= STATUS ================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.status-badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.status-assigned {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-assigned::before {
+    background: #16a34a;
+}
+
+.status-available {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-available::before {
+    background: #2563eb;
+}
+
+.status-repair {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.status-repair::before {
+    background: #f97316;
+}
+
+
+/* ================= INFORMATION ================= */
+
+.info-title {
+    font-size: 20px;
+    color: #0f172a;
+    margin: 0 0 25px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px 45px;
+}
+
+.info-item {
+    min-width: 0;
+}
+
+.info-item small {
+    display: block;
+    color: #64748b;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.info-item strong {
+    color: #0f172a;
+    font-size: 16px;
+    word-break: break-word;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 28px 0;
+}
+
+
+/* ================= EMPLOYEE ================= */
+
+.employee-section h2 {
+    margin: 0 0 14px;
+    font-size: 20px;
+    color: #0f172a;
+}
+
+.employee-box {
+    padding: 15px 17px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.employee-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.employee-meta {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.not-assigned {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px dashed #cbd5e1;
+}
+
+
+/* ================= ACTIONS ================= */
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    text-decoration: none;
+    padding: 12px 17px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+/* Edit */
+
+.edit-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #1d4ed8;
+}
+
+
+/* Assign */
+
+.assign-btn {
+    background: #16a34a;
+    color: white;
+}
+
+.assign-btn:hover {
+    background: #15803d;
+}
+
+
+/* Return */
+
+.return-btn {
+    background: #f59e0b;
+    color: white;
+}
+
+.return-btn:hover {
+    background: #d97706;
+}
+
+
+/* Delete */
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .back-btn {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .asset-detail-page {
+        margin: 25px auto;
+        padding: 0 12px;
+    }
+
+    .detail-card {
+        padding: 18px;
+        border-radius: 15px;
+    }
+
+    .asset-image {
+        height: 200px;
+    }
+
+    .asset-icon {
+        font-size: 65px;
+    }
+
+    .asset-name {
+        font-size: 21px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+}
+
+</style>
+
+
+<div class="asset-detail-page">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="detail-header">
+
+        <div>
+
+            <h1>Asset Details</h1>
+
+            <p>
+                Complete information about this IT asset.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'assets' %}"
+            class="back-btn"
+        >
+            ← Back to Assets
+        </a>
+
+    </div>
+
+
+
+    <div class="detail-grid">
+
+
+        <!-- ================= LEFT CARD ================= -->
+
+        <div class="detail-card">
+
+
+            <div class="asset-image">
+
+                {% if asset.asset_type == "Laptop" %}
+
+                    <span class="asset-icon">💻</span>
+
+                {% elif asset.asset_type == "Desktop" %}
+
+                    <span class="asset-icon">🖥️</span>
+
+                {% elif asset.asset_type == "Monitor" %}
+
+                    <span class="asset-icon">🖥️</span>
+
+                {% elif asset.asset_type == "Printer" %}
+
+                    <span class="asset-icon">🖨️</span>
+
+                {% elif asset.asset_type == "Phone" %}
+
+                    <span class="asset-icon">📱</span>
+
+                {% elif asset.asset_type == "Tablet" %}
+
+                    <span class="asset-icon">📱</span>
+
+                {% elif asset.asset_type == "Server" %}
+
+                    <span class="asset-icon">🗄️</span>
+
+                {% elif asset.asset_type == "Keyboard" %}
+
+                    <span class="asset-icon">⌨️</span>
+
+                {% elif asset.asset_type == "Mouse" %}
+
+                    <span class="asset-icon">🖱️</span>
+
+                {% else %}
+
+                    <span class="asset-icon">💻</span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="asset-name">
+
+                {{ asset.asset_name }}
+
+            </div>
+
+
+            <div class="asset-id">
+
+                {{ asset.asset_id }}
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            {% if asset.status == "Assigned" %}
+
+                <span class="status-badge status-assigned">
+                    Assigned
+                </span>
+
+            {% elif asset.status == "Available" %}
+
+                <span class="status-badge status-available">
+                    Available
+                </span>
+
+            {% elif asset.status == "Repair" %}
+
+                <span class="status-badge status-repair">
+                    Repair
+                </span>
+
+            {% else %}
+
+                <span class="status-badge">
+                    {{ asset.status }}
+                </span>
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- ================= RIGHT CARD ================= -->
+
+        <div class="detail-card">
+
+
+            <h2 class="info-title">
+                Asset Information
+            </h2>
+
+
+            <div class="info-grid">
+
+
+                <div class="info-item">
+
+                    <small>
+                        Asset ID
+                    </small>
+
+                    <strong>
+                        {{ asset.asset_id }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Asset Tag
+                    </small>
+
+                    <strong>
+                        {{ asset.asset_tag }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Type
+                    </small>
+
+                    <strong>
+                        {{ asset.asset_type }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Brand
+                    </small>
+
+                    <strong>
+                        {{ asset.brand }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Model
+                    </small>
+
+                    <strong>
+                        {{ asset.model }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Serial Number
+                    </small>
+
+                    <strong>
+                        {{ asset.serial_number }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Purchase Date
+                    </small>
+
+                    <strong>
+                        {{ asset.purchase_date|date:"d M Y" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <small>
+                        Price
+                    </small>
+
+                    <strong>
+                        ₹{{ asset.price }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <hr class="divider">
+
+
+
+            <!-- ================= ASSIGNED EMPLOYEE ================= -->
+
+            <div class="employee-section">
+
+
+                <h2>
+                    Assigned Employee
+                </h2>
+
+
+                {% if asset.assigned_employee %}
+
+                    <div class="employee-box">
+
+                        <div class="employee-name">
+
+                            {{ asset.assigned_employee.name }}
+
+                        </div>
+
+                        <div class="employee-meta">
+
+                            {{ asset.assigned_employee.employee_id }}
+
+                            ·
+
+                            {{ asset.assigned_employee.department }}
+
+                        </div>
+
+                    </div>
+
+
+                {% else %}
+
+                    <div class="not-assigned">
+
+                        This asset is currently not assigned
+                        to any employee.
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- ================= ACTIONS ================= -->
+
+                {% if request.session.role == "it_support" %}
+
+                    <div class="action-buttons">
+
+
+                        <!-- EDIT -->
+
+                        <a
+                            href="{% url 'asset_edit' asset.id %}"
+                            class="action-btn edit-btn"
+                        >
+                            ✏️ Edit Asset
+                        </a>
+
+
+
+                        <!-- ASSIGN / REASSIGN -->
+
+                        {% if asset.status == "Available" %}
+
+                            <a
+                                href="{% url 'assign_asset' asset.id %}"
+                                class="action-btn assign-btn"
+                            >
+                                + Assign Asset
+                            </a>
+
+
+                        {% elif asset.assigned_employee %}
+
+                            <a
+                                href="{% url 'assign_asset' asset.id %}"
+                                class="action-btn assign-btn"
+                            >
+                                🔄 Reassign Asset
+                            </a>
+
+
+                            <!-- RETURN -->
+
+                            <a
+                                href="{% url 'return_asset' asset.id %}"
+                                class="action-btn return-btn"
+                                onclick="return confirm('Are you sure you want to return this asset?');"
+                            >
+                                ↩ Return Asset
+                            </a>
+
+                        {% endif %}
+
+
+
+                        <!-- DELETE -->
+
+                        <a
+                            href="{% url 'asset_delete' asset.id %}"
+                            class="action-btn delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this asset?');"
+                        >
+                            🗑 Delete
+                        </a>
+
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

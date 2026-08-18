@@ -1,0 +1,1925 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Employees | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   EMPLOYEE PAGE
+========================================================= */
+
+.employee-page {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding-bottom: 45px;
+    animation: employeePageIn .45s ease both;
+}
+
+@keyframes employeePageIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   COMPACT HERO
+========================================================= */
+
+.employee-hero {
+
+    position: relative;
+
+    min-height: 205px;
+
+    overflow: hidden;
+
+    margin-bottom: 22px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            105deg,
+            rgba(4,14,28,.98),
+            rgba(8,31,57,.94),
+            rgba(19,61,99,.78)
+        );
+
+    box-shadow:
+        0 16px 40px rgba(15,23,42,.14);
+
+}
+
+
+.employee-hero-image {
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+
+        linear-gradient(
+            90deg,
+            rgba(4,13,27,.98) 0%,
+            rgba(4,13,27,.83) 48%,
+            rgba(4,13,27,.25) 100%
+        ),
+
+        url("https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1600&q=90");
+
+    background-size: cover;
+
+    background-position: center;
+
+    opacity: .58;
+
+}
+
+
+.employee-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+
+    height: 260px;
+
+    right: -90px;
+
+    top: -145px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(96,165,250,.30),
+            transparent 68%
+        );
+
+}
+
+
+.employee-hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 690px;
+
+    padding: 28px 34px;
+
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.employee-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.13);
+
+    color: #bfdbfe;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+
+.employee-label span {
+
+    font-family:
+        "Segoe UI Emoji",
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.employee-hero h1 {
+
+    margin: 13px 0 7px;
+
+    color: white;
+
+    font-size:
+        clamp(29px, 3.4vw, 42px);
+
+    line-height: 1.05;
+
+    letter-spacing: -1.4px;
+
+}
+
+
+.employee-hero h1 span {
+
+    color: #60a5fa;
+
+}
+
+
+.employee-hero p {
+
+    max-width: 560px;
+
+    margin: 0;
+
+    color: #cbd5e1;
+
+    font-size: 12.5px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   HERO INFO
+========================================================= */
+
+.hero-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-top: 15px;
+
+}
+
+
+.hero-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #dbeafe;
+
+    font-size: 11px;
+
+    font-weight: 650;
+
+}
+
+
+.hero-status-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 0 4px rgba(34,197,94,.12);
+
+}
+
+
+.hero-count {
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+.hero-count strong {
+
+    color: white;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.employee-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 16px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.summary-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 20px 22px;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7edf4;
+
+    box-shadow:
+        0 7px 25px rgba(15,23,42,.055);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.summary-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 14px 30px rgba(15,23,42,.09);
+
+}
+
+
+.summary-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 110px;
+
+    height: 110px;
+
+    right: -45px;
+
+    bottom: -55px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(59,130,246,.045);
+
+}
+
+
+.summary-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.summary-label {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .9px;
+
+    text-transform: uppercase;
+
+}
+
+
+.summary-number {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #0f172a;
+
+    font-size: 30px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+}
+
+
+.summary-caption {
+
+    margin-top: 7px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+.summary-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 15px;
+
+    font-family:
+        "Segoe UI Emoji",
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+    font-size: 25px;
+
+}
+
+
+.people-icon {
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff,
+            #dbeafe
+        );
+
+}
+
+
+.assets-icon {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ecfdf5,
+            #d1fae5
+        );
+
+}
+
+
+/* =========================================================
+   DIRECTORY
+========================================================= */
+
+.employee-directory {
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e7edf4;
+
+    border-radius: 21px;
+
+    box-shadow:
+        0 9px 32px rgba(15,23,42,.055);
+
+}
+
+
+.directory-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 21px 24px;
+
+    border-bottom:
+        1px solid #edf1f5;
+
+}
+
+
+.directory-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.directory-heading-icon {
+
+    width: 43px;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff,
+            #e0edff
+        );
+
+    font-family:
+        "Segoe UI Emoji",
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+    font-size: 20px;
+
+}
+
+
+.directory-heading h2 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 18px;
+
+    font-weight: 750;
+
+}
+
+
+.directory-heading p {
+
+    margin: 3px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   SEARCH + ADD
+========================================================= */
+
+.directory-tools {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+}
+
+
+.search-box {
+
+    position: relative;
+
+}
+
+
+.search-box input {
+
+    width: 250px;
+
+    height: 41px;
+
+    box-sizing: border-box;
+
+    padding:
+        0 13px 0 39px;
+
+    outline: none;
+
+    border:
+        1px solid #dce4ee;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    color: #0f172a;
+
+    font-size: 12px;
+
+    transition: .2s ease;
+
+}
+
+
+.search-box input::placeholder {
+
+    color: #94a3b8;
+
+}
+
+
+.search-box input:focus {
+
+    background: #ffffff;
+
+    border-color: #60a5fa;
+
+    box-shadow:
+        0 0 0 4px rgba(96,165,250,.09);
+
+}
+
+
+.search-symbol {
+
+    position: absolute;
+
+    left: 13px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    font-family:
+        "Segoe UI Emoji",
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+}
+
+
+/* ADD */
+
+.add-employee {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    height: 41px;
+
+    padding: 0 15px;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: #ffffff !important;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 7px 17px rgba(37,99,235,.17);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.add-employee:hover {
+
+    color: #ffffff !important;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 11px 23px rgba(37,99,235,.24);
+
+}
+
+
+.add-employee span {
+
+    font-size: 17px;
+
+    line-height: 1;
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.employee-table {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+}
+
+
+.employee-table thead {
+
+    background: #f8fafc;
+
+}
+
+
+.employee-table th {
+
+    padding: 12px 20px;
+
+    text-align: left;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .8px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+}
+
+
+.employee-table td {
+
+    padding: 15px 20px;
+
+    border-top:
+        1px solid #f1f5f9;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    vertical-align: middle;
+
+}
+
+
+.employee-table tbody tr {
+
+    transition:
+        background .18s ease;
+
+}
+
+
+.employee-table tbody tr:hover {
+
+    background: #f8fbff;
+
+}
+
+
+/* =========================================================
+   EMPLOYEE PROFILE
+========================================================= */
+
+.employee-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.employee-avatar {
+
+    width: 41px;
+
+    height: 41px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #e0e7ff
+        );
+
+    color: #3730a3;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 4px 11px rgba(79,70,229,.08);
+
+}
+
+
+.employee-name {
+
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+}
+
+
+.employee-joined {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   EMPLOYEE ID
+========================================================= */
+
+.employee-id {
+
+    display: inline-flex;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    background: #f1f5f9;
+
+    color: #334155;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   DEPARTMENT
+========================================================= */
+
+.department-text {
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+}
+
+
+/* =========================================================
+   ROLE
+========================================================= */
+
+.role-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+}
+
+
+.role-dot {
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #3b82f6;
+
+}
+
+
+/* =========================================================
+   ASSETS
+========================================================= */
+
+.asset-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 8px;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    font-size: 10px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+}
+
+
+.asset-emoji {
+
+    font-family:
+        "Segoe UI Emoji",
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+}
+
+
+.no-assets {
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   VIEW
+========================================================= */
+
+.view-employee {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 7px 11px;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    color: #334155 !important;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+
+}
+
+
+.view-employee:hover {
+
+    background: #eff6ff;
+
+    border-color: #bfdbfe;
+
+    color: #2563eb !important;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.view-arrow {
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+    text-align: center;
+
+    padding: 65px 20px !important;
+
+    color: #64748b;
+
+}
+
+
+.empty-icon {
+
+    width: 68px;
+
+    height: 68px;
+
+    margin:
+        0 auto 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 19px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff,
+            #dbeafe
+        );
+
+    font-family:
+        "Segoe UI Emoji",
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+    font-size: 32px;
+
+}
+
+
+.empty-state strong {
+
+    color: #334155;
+
+    font-size: 14px;
+
+}
+
+
+.empty-state p {
+
+    margin-top: 6px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .directory-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .directory-tools {
+
+        width: 100%;
+
+    }
+
+
+    .search-box {
+
+        flex: 1;
+
+    }
+
+
+    .search-box input {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 680px) {
+
+    .employee-hero {
+
+        min-height: 270px;
+
+        border-radius: 19px;
+
+    }
+
+
+    .employee-hero-content {
+
+        padding: 27px 22px;
+
+    }
+
+
+    .employee-hero h1 {
+
+        font-size: 32px;
+
+    }
+
+
+    .employee-summary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .directory-tools {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .search-box {
+
+        width: 100%;
+
+    }
+
+
+    .add-employee {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .employee-hero-content {
+
+        padding: 23px 18px;
+
+    }
+
+
+    .employee-hero h1 {
+
+        font-size: 28px;
+
+    }
+
+
+    .employee-hero p {
+
+        font-size: 12px;
+
+    }
+
+
+    .hero-info {
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .hero-count {
+
+        display: none;
+
+    }
+
+
+    .summary-card {
+
+        padding: 18px;
+
+    }
+
+
+    .summary-number {
+
+        font-size: 27px;
+
+    }
+
+}
+
+</style>
+
+
+<div class="employee-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="employee-hero">
+
+        <div class="employee-hero-image"></div>
+
+
+        <div class="employee-hero-content">
+
+
+            <span class="employee-label">
+
+                <span>👥</span>
+
+                AssetFlow People
+
+            </span>
+
+
+            <h1>
+
+                People behind the
+                <span>technology.</span>
+
+            </h1>
+
+
+            <p>
+
+                Manage employees, understand asset ownership,
+                and keep your organization connected with the
+                right technology.
+
+            </p>
+
+
+            <div class="hero-info">
+
+
+                <div class="hero-status">
+
+                    <span class="hero-status-dot"></span>
+
+                    Employee directory active
+
+                </div>
+
+
+                <div class="hero-count">
+
+                    <strong>
+                        {{ employees|length }}
+                    </strong>
+
+                    registered employees
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <section class="employee-summary">
+
+
+        <!-- TOTAL EMPLOYEES -->
+
+        <div class="summary-card">
+
+            <div class="summary-content">
+
+
+                <div>
+
+                    <span class="summary-label">
+
+                        Total Employees
+
+                    </span>
+
+
+                    <span class="summary-number">
+
+                        {{ employees|length }}
+
+                    </span>
+
+
+                    <div class="summary-caption">
+
+                        People registered in AssetFlow
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-icon people-icon">
+
+                    👥
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EMPLOYEES WITH ASSETS -->
+
+        <div class="summary-card">
+
+            <div class="summary-content">
+
+
+                <div>
+
+                    <span class="summary-label">
+
+                        Employees With Assets
+
+                    </span>
+
+
+                    <!-- ACTUAL DATABASE COUNT -->
+
+                    <span class="summary-number">
+
+                        {{ employees_with_assets }}
+
+                    </span>
+
+
+                    <div class="summary-caption">
+
+                        Employees currently holding IT assets
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-icon assets-icon">
+
+                    💻
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         DIRECTORY
+    ====================================================== -->
+
+    <section class="employee-directory">
+
+
+        <!-- DIRECTORY HEADER -->
+
+        <div class="directory-header">
+
+
+            <div class="directory-heading">
+
+
+                <div class="directory-heading-icon">
+
+                    👤
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+
+                        Employee Directory
+
+                    </h2>
+
+
+                    <p>
+
+                        View employee information and assigned assets.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="directory-tools">
+
+
+                <!-- SEARCH -->
+
+                <div class="search-box">
+
+
+                    <span class="search-symbol">
+
+                        🔎
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="employeeSearch"
+                        placeholder="Search employee..."
+                        onkeyup="searchEmployees()"
+                    >
+
+
+                </div>
+
+
+
+                <!-- ADD EMPLOYEE -->
+
+                <a
+                    href="{% url 'employee_add' %}"
+                    class="add-employee"
+                >
+
+                    <span>＋</span>
+
+                    Add Employee
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+
+            <table
+                class="employee-table"
+                id="employeeTable"
+            >
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>
+
+                            Employee
+
+                        </th>
+
+
+                        <th>
+
+                            Employee ID
+
+                        </th>
+
+
+                        <th>
+
+                            Department
+
+                        </th>
+
+
+                        <th>
+
+                            Role
+
+                        </th>
+
+
+                        <th>
+
+                            Assets
+
+                        </th>
+
+
+                        <th>
+
+                            Action
+
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for employee in employees %}
+
+
+                    <tr>
+
+
+                        <!-- EMPLOYEE -->
+
+                        <td>
+
+
+                            <div class="employee-profile">
+
+
+                                <div class="employee-avatar">
+
+                                    {{ employee.name|first|upper }}
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <span class="employee-name">
+
+                                        {{ employee.name }}
+
+                                    </span>
+
+
+                                    <span class="employee-joined">
+
+                                        Joined
+
+                                        {{ employee.joining_date|date:"d M Y" }}
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </td>
+
+
+
+                        <!-- ID -->
+
+                        <td>
+
+
+                            <span class="employee-id">
+
+                                {{ employee.employee_id }}
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td>
+
+
+                            <span class="department-text">
+
+                                {{ employee.department }}
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <!-- ROLE -->
+
+                        <td>
+
+
+                            <span class="role-badge">
+
+
+                                <span class="role-dot"></span>
+
+
+                                {{ employee.role }}
+
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <!-- ASSETS -->
+
+                        <td>
+
+
+                            {% if employee.assets.exists %}
+
+
+                                <span class="asset-badge">
+
+
+                                    <span class="asset-emoji">
+
+                                        💻
+
+                                    </span>
+
+
+                                    {{ employee.assets.count }}
+
+
+                                    Asset{{ employee.assets.count|pluralize }}
+
+
+                                </span>
+
+
+                            {% else %}
+
+
+                                <span class="no-assets">
+
+                                    No Assets
+
+                                </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- VIEW -->
+
+                        <td>
+
+
+                            <a
+                                href="{% url 'employee_detail' employee.id %}"
+                                class="view-employee"
+                            >
+
+                                View
+
+                                <span class="view-arrow">
+
+                                    →
+
+                                </span>
+
+                            </a>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+
+                    <tr>
+
+
+                        <td
+                            colspan="6"
+                            class="empty-state"
+                        >
+
+
+                            <div class="empty-icon">
+
+                                👥
+
+                            </div>
+
+
+                            <strong>
+
+                                No employees found
+
+                            </strong>
+
+
+                            <p>
+
+                                Add your first employee to get started.
+
+                            </p>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SEARCH SCRIPT
+========================================================= -->
+
+<script>
+
+function searchEmployees() {
+
+    const input =
+        document.getElementById("employeeSearch");
+
+    const filter =
+        input.value.toLowerCase();
+
+    const table =
+        document.getElementById("employeeTable");
+
+    const rows =
+        table.getElementsByTagName("tr");
+
+
+    for (let i = 1; i < rows.length; i++) {
+
+        const row =
+            rows[i];
+
+        const text =
+            row.textContent.toLowerCase();
+
+
+        if (text.includes(filter)) {
+
+            row.style.display = "";
+
+        }
+
+        else {
+
+            row.style.display = "none";
+
+        }
+
+    }
+
+}
+
+</script>
+
+
+{% endblock %}

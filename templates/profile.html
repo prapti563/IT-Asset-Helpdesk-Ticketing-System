@@ -1,0 +1,2680 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.profile-page {
+    font-family: "Inter", sans-serif;
+    color: #18233d;
+    width: 100%;
+    max-width: 1450px;
+    margin: auto;
+    padding: 10px 4px 40px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.profile-hero {
+    position: relative;
+    height: 270px;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    margin-bottom: 24px;
+
+    background:
+        radial-gradient(
+            circle at 80% 15%,
+            rgba(255,255,255,.16),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 60% 100%,
+            rgba(124,58,237,.25),
+            transparent 32%
+        ),
+        linear-gradient(
+            115deg,
+            #3025b9 0%,
+            #3930d2 45%,
+            #2864ed 100%
+        );
+
+    box-shadow:
+        0 18px 45px rgba(40, 45, 170, .20);
+}
+
+
+/* dots */
+
+.profile-hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        radial-gradient(
+            rgba(255,255,255,.17) 1px,
+            transparent 1px
+        );
+
+    background-size: 17px 17px;
+
+    opacity: .35;
+}
+
+
+/* decorative circle */
+
+.profile-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -160px;
+    top: -280px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+
+.hero-content {
+    position: relative;
+
+    z-index: 5;
+
+    padding: 48px 48px;
+
+    color: white;
+
+    width: 55%;
+}
+
+
+.hero-small {
+    font-size: 16px;
+
+    color: rgba(255,255,255,.85);
+
+    margin-bottom: 8px;
+}
+
+
+.hero-content h1 {
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 38px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    margin: 0 0 14px;
+
+    letter-spacing: -.8px;
+}
+
+
+.hero-content p {
+    font-size: 16px;
+
+    line-height: 1.7;
+
+    color: rgba(255,255,255,.82);
+
+    margin: 0;
+
+    max-width: 430px;
+}
+
+
+/* =========================================================
+   HERO ILLUSTRATION
+========================================================= */
+
+.hero-person {
+    position: absolute;
+
+    z-index: 4;
+
+    right: 115px;
+    bottom: 0;
+
+    width: 170px;
+    height: 235px;
+}
+
+
+/* head */
+
+.person-head {
+    position: absolute;
+
+    width: 68px;
+    height: 72px;
+
+    left: 50px;
+    top: 7px;
+
+    border-radius: 50%;
+
+    background: #f0b38c;
+
+    z-index: 3;
+}
+
+
+/* hair */
+
+.person-head::before {
+    content: "";
+
+    position: absolute;
+
+    width: 73px;
+    height: 39px;
+
+    left: -2px;
+    top: -7px;
+
+    border-radius: 60% 60% 35% 30%;
+
+    background: #172033;
+}
+
+
+/* neck */
+
+.person-neck {
+    position: absolute;
+
+    width: 30px;
+    height: 30px;
+
+    left: 69px;
+    top: 65px;
+
+    background: #e3a47c;
+}
+
+
+/* body */
+
+.person-body {
+    position: absolute;
+
+    width: 132px;
+    height: 130px;
+
+    left: 20px;
+    top: 82px;
+
+    border-radius: 38px 38px 15px 15px;
+
+    background:
+        linear-gradient(
+            140deg,
+            #8b5cf6,
+            #4f46e5
+        );
+}
+
+
+/* laptop */
+
+.laptop {
+    position: absolute;
+
+    z-index: 8;
+
+    width: 130px;
+    height: 82px;
+
+    left: 13px;
+    top: 135px;
+
+    border-radius: 8px;
+
+    background: #263449;
+
+    transform: rotate(-5deg);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.22);
+}
+
+
+.laptop-screen {
+    position: absolute;
+
+    width: 112px;
+    height: 60px;
+
+    left: 9px;
+    top: 8px;
+
+    border-radius: 5px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #818cf8
+        );
+}
+
+
+.laptop-base {
+    position: absolute;
+
+    width: 145px;
+    height: 9px;
+
+    left: -8px;
+    bottom: -8px;
+
+    border-radius: 0 0 10px 10px;
+
+    background: #111827;
+}
+
+
+/* floating icons */
+
+.hero-icon {
+    position: absolute;
+
+    z-index: 6;
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: rgba(255,255,255,.13);
+
+    border: 1px solid rgba(255,255,255,.20);
+
+    backdrop-filter: blur(10px);
+
+    color: white;
+
+    font-size: 22px;
+}
+
+
+.hero-icon.one {
+    right: 410px;
+    top: 52px;
+}
+
+
+.hero-icon.two {
+    right: 55px;
+    top: 80px;
+}
+
+
+.hero-icon.three {
+    right: 330px;
+    bottom: 38px;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.profile-layout {
+    display: grid;
+
+    grid-template-columns: 305px minmax(0, 1fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.left-side {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
+
+.identity-card {
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 24px;
+
+    padding: 29px 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.06);
+}
+
+
+.avatar {
+    width: 104px;
+    height: 104px;
+
+    margin: 0 auto 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5,
+            #2563eb
+        );
+
+    border: 6px solid #f4f5ff;
+
+    color: white;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 33px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 15px 32px rgba(79,70,229,.28);
+}
+
+
+.online {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 12px;
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+    border-radius: 50px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.online i {
+    font-size: 8px;
+}
+
+
+.identity-card h2 {
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 23px;
+
+    margin: 13px 0 5px;
+
+    color: #172033;
+}
+
+
+.role {
+    color: #4f46e5;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 13px;
+}
+
+
+.department {
+    display: inline-block;
+
+    padding: 7px 13px;
+
+    border-radius: 50px;
+
+    background: #f0f1ff;
+
+    color: #4f46e5;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PROFILE DETAILS
+========================================================= */
+
+.details {
+    text-align: left;
+
+    margin-top: 25px;
+
+    padding-top: 21px;
+
+    border-top: 1px solid #edf0f4;
+}
+
+
+.detail-row {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 19px;
+}
+
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+
+.detail-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #f4f5ff;
+
+    color: #4f46e5;
+
+    font-size: 13px;
+}
+
+
+.detail-label {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    margin-bottom: 4px;
+}
+
+
+.detail-value {
+    display: block;
+
+    color: #25314a;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security-card {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111936,
+            #1d2855
+        );
+
+    color: white;
+
+    border-radius: 22px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 15px 35px rgba(15,23,42,.15);
+}
+
+
+.security-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 160px;
+    height: 160px;
+
+    border-radius: 50%;
+
+    right: -70px;
+    bottom: -85px;
+
+    background: rgba(99,102,241,.16);
+}
+
+
+.security-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.10);
+
+    color: #a5b4fc;
+
+    margin-bottom: 15px;
+
+    font-size: 18px;
+}
+
+
+.security-card h3 {
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 18px;
+
+    margin: 0 0 7px;
+}
+
+
+.security-card p {
+    color: #aab4cc;
+
+    font-size: 12px;
+
+    line-height: 1.65;
+
+    margin: 0 0 16px;
+}
+
+
+.security-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #86efac;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.security-status span {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+}
+
+
+/* =========================================================
+   RIGHT
+========================================================= */
+
+.right-side {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   INFORMATION CARD
+========================================================= */
+
+.information-card {
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.06);
+}
+
+
+.card-header {
+    padding: 21px 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+
+.card-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.card-title-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #f1f2ff;
+
+    color: #5b4fe9;
+
+    font-size: 16px;
+}
+
+
+.card-title h3 {
+    font-family: "Space Grotesk", sans-serif;
+
+    margin: 0;
+
+    font-size: 19px;
+
+    color: #18233d;
+}
+
+
+.card-title p {
+    margin: 4px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+.view-details {
+    padding: 10px 14px;
+
+    border: 1px solid #e2e6ed;
+
+    border-radius: 10px;
+
+    color: #334155;
+
+    background: white;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   INFORMATION GRID
+========================================================= */
+
+.information-grid {
+    padding: 23px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+.info-box {
+    min-height: 105px;
+
+    padding: 17px;
+
+    border-radius: 17px;
+
+    border: 1px solid #e9edf3;
+
+    background: #fbfcfe;
+
+    transition: .25s ease;
+}
+
+
+.info-box:hover {
+    transform: translateY(-3px);
+
+    border-color: #dcdfff;
+
+    box-shadow:
+        0 10px 25px rgba(79,70,229,.07);
+}
+
+
+.info-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+}
+
+
+.info-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #4f46e5;
+
+    box-shadow:
+        0 4px 12px rgba(15,23,42,.06);
+
+    font-size: 13px;
+}
+
+
+.info-label {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+.info-value {
+    color: #172033;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-card {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.06);
+}
+
+
+.stat-box {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    padding: 24px 15px;
+
+    border-right: 1px solid #edf0f4;
+}
+
+
+.stat-box:last-child {
+    border-right: none;
+}
+
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    font-size: 19px;
+}
+
+
+.stat-box:nth-child(2) .stat-icon {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+.stat-box:nth-child(3) .stat-icon {
+    background: #fff7ed;
+    color: #f97316;
+}
+
+
+.stat-box:nth-child(4) .stat-icon {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+
+.stat-number {
+    display: block;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+.stat-label {
+    display: block;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 6px;
+}
+
+
+/* =========================================================
+   ASSETS
+========================================================= */
+
+.assets-card {
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.06);
+}
+
+
+.assets-header {
+    padding: 21px 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+
+.assets-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.assets-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #f1f2ff;
+
+    color: #5b4fe9;
+
+    font-size: 16px;
+}
+
+
+.assets-title h3 {
+    font-family: "Space Grotesk", sans-serif;
+
+    margin: 0;
+
+    font-size: 19px;
+}
+
+
+.assets-title p {
+    margin: 4px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+.asset-count {
+    color: #64748b;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* table */
+
+.asset-table-wrapper {
+    overflow-x: auto;
+}
+
+
+.asset-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 720px;
+}
+
+
+.asset-table th {
+    padding: 14px 18px;
+
+    text-align: left;
+
+    background: #fafbfe;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .6px;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+
+.asset-table td {
+    padding: 17px 18px;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #f0f2f5;
+}
+
+
+.asset-table tbody tr {
+    transition: .2s ease;
+}
+
+
+.asset-table tbody tr:hover {
+    background: #fafbff;
+}
+
+
+.asset-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.asset-id {
+    color: #25314a;
+
+    font-weight: 800;
+
+    font-size: 12px;
+}
+
+
+.asset-tag {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    margin-top: 4px;
+}
+
+
+.asset-name {
+    color: #25314a;
+
+    font-weight: 700;
+
+    font-size: 13px;
+}
+
+
+.type {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 12px;
+}
+
+
+.type i {
+    color: #6366f1;
+
+    font-size: 14px;
+}
+
+
+.brand {
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+.status {
+    display: inline-flex;
+
+    padding: 6px 11px;
+
+    border-radius: 50px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.status-active {
+    color: #047857;
+
+    background: #ecfdf5;
+}
+
+
+.status-repair {
+    color: #c2410c;
+
+    background: #fff7ed;
+}
+
+
+.status-available {
+    color: #2563eb;
+
+    background: #eff6ff;
+}
+
+
+.status-default {
+    color: #64748b;
+
+    background: #f1f5f9;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state {
+    padding: 55px 20px;
+
+    text-align: center;
+}
+
+
+.empty-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: auto auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #f1f3ff;
+
+    color: #6366f1;
+
+    font-size: 25px;
+}
+
+
+.empty-state h3 {
+    margin: 0 0 7px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 18px;
+}
+
+
+.empty-state p {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   IT SUPPORT
+========================================================= */
+
+.it-card {
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 24px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.06);
+}
+
+
+.it-banner {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 28px;
+
+    margin-bottom: 22px;
+
+    border-radius: 20px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            120deg,
+            #101936,
+            #312e81,
+            #4338ca
+        );
+}
+
+
+.it-avatar {
+    width: 78px;
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 21px;
+
+    background: rgba(255,255,255,.12);
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    font-size: 28px;
+
+    color: #c4b5fd;
+}
+
+
+.it-banner h2 {
+    font-family: "Space Grotesk", sans-serif;
+
+    margin: 0 0 6px;
+
+    font-size: 25px;
+}
+
+
+.it-banner p {
+    margin: 0;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+    .profile-layout {
+        grid-template-columns: 270px minmax(0, 1fr);
+    }
+
+    .hero-person {
+        right: 60px;
+        transform: scale(.88);
+        transform-origin: bottom right;
+    }
+
+    .hero-icon.one {
+        right: 340px;
+    }
+
+    .hero-icon.three {
+        right: 270px;
+    }
+
+    .information-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .identity-card {
+        max-width: 420px;
+        width: 100%;
+        margin: auto;
+    }
+
+    .security-card {
+        display: none;
+    }
+
+    .hero-content {
+        width: 65%;
+    }
+
+    .hero-person {
+        opacity: .55;
+        right: 0;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .profile-page {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .profile-hero {
+        height: 225px;
+
+        border-radius: 20px;
+    }
+
+    .hero-content {
+        width: 100%;
+
+        padding: 32px 26px;
+    }
+
+    .hero-content h1 {
+        font-size: 29px;
+    }
+
+    .hero-content p {
+        font-size: 13px;
+    }
+
+    .hero-person,
+    .hero-icon {
+        display: none;
+    }
+
+    .information-grid {
+        grid-template-columns: 1fr;
+
+        padding: 18px;
+    }
+
+    .stats-card {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-box {
+        border-right: none;
+
+        border-bottom: 1px solid #edf0f4;
+    }
+
+    .stat-box:nth-child(odd) {
+        border-right: 1px solid #edf0f4;
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .profile-hero {
+        height: 215px;
+    }
+
+    .hero-content h1 {
+        font-size: 25px;
+    }
+
+    .stats-card {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-box,
+    .stat-box:nth-child(odd) {
+        border-right: none;
+
+        border-bottom: 1px solid #edf0f4;
+    }
+
+    .stat-box:last-child {
+        border-bottom: none;
+    }
+
+    .card-header,
+    .assets-header {
+        padding: 17px;
+    }
+
+}
+
+</style>
+
+
+<div class="profile-page">
+
+
+{% if role == "employee" and employee %}
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="profile-hero">
+
+
+    <div class="hero-content">
+
+        <div class="hero-small">
+            Welcome back,
+        </div>
+
+        <h1>
+            {{ employee.name }} 👋
+        </h1>
+
+        <p>
+            Here's your profile overview and
+            assigned assets.
+        </p>
+
+    </div>
+
+
+    <!-- VISUAL -->
+
+    <div class="hero-person">
+
+        <div class="person-head"></div>
+
+        <div class="person-neck"></div>
+
+        <div class="person-body"></div>
+
+        <div class="laptop">
+
+            <div class="laptop-screen"></div>
+
+            <div class="laptop-base"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FLOATING ICONS -->
+
+    <div class="hero-icon one">
+
+        <i class="fa-solid fa-display"></i>
+
+    </div>
+
+
+    <div class="hero-icon two">
+
+        <i class="fa-solid fa-mobile-screen"></i>
+
+    </div>
+
+
+    <div class="hero-icon three">
+
+        <i class="fa-solid fa-headset"></i>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<div class="profile-layout">
+
+
+    <!-- =================================================
+         LEFT SIDE
+    ================================================== -->
+
+    <div class="left-side">
+
+
+        <!-- PROFILE -->
+
+        <div class="identity-card">
+
+
+            <div class="avatar">
+
+                {{ employee.name|slice:":1"|upper }}
+
+            </div>
+
+
+            <span class="online">
+
+                <i class="fa-solid fa-circle"></i>
+
+                Online
+
+            </span>
+
+
+            <h2>
+                {{ employee.name }}
+            </h2>
+
+
+            <div class="role">
+                {{ employee.role }}
+            </div>
+
+
+            <span class="department">
+                {{ employee.department }}
+            </span>
+
+
+            <!-- DETAILS -->
+
+            <div class="details">
+
+
+                <!-- Employee ID -->
+
+                <div class="detail-row">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-id-card"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+                            Employee ID
+                        </span>
+
+                        <span class="detail-value">
+                            {{ employee.employee_id }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="detail-row">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+                            Email
+                        </span>
+
+                        <span class="detail-value">
+
+                            {% if employee.email %}
+                                {{ employee.email }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="detail-row">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-phone"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+                            Phone
+                        </span>
+
+                        <span class="detail-value">
+
+                            {% if employee.phone %}
+                                {{ employee.phone }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <div class="detail-row">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+                            Department
+                        </span>
+
+                        <span class="detail-value">
+                            {{ employee.department }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Member Since -->
+
+                <div class="detail-row">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+                            Member Since
+                        </span>
+
+                        <span class="detail-value">
+                            {{ employee.joining_date|date:"d M Y" }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SECURITY -->
+
+        <div class="security-card">
+
+
+            <div class="security-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+
+            <h3>
+                Account Security
+            </h3>
+
+
+            <p>
+                Keep your AssetFlow account
+                secure and protected.
+            </p>
+
+
+            <div class="security-status">
+
+                <span></span>
+
+                Account Active
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         RIGHT SIDE
+    ================================================== -->
+
+    <div class="right-side">
+
+
+        <!-- =================================================
+             EMPLOYEE INFORMATION
+        ================================================== -->
+
+        <div class="information-card">
+
+
+            <div class="card-header">
+
+
+                <div class="card-title">
+
+
+                    <div class="card-title-icon">
+
+                        <i class="fa-solid fa-user-group"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            Employee Information
+                        </h3>
+
+                        <p>
+                            Manage your account and work information
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="view-details">
+
+                    View Full Details
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="information-grid">
+
+
+                <!-- Department -->
+
+                <div class="info-box">
+
+                    <div class="info-top">
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-building"></i>
+
+                        </div>
+
+                        <span class="info-label">
+                            Department
+                        </span>
+
+                    </div>
+
+                    <div class="info-value">
+                        {{ employee.department }}
+                    </div>
+
+                </div>
+
+
+                <!-- Role -->
+
+                <div class="info-box">
+
+                    <div class="info-top">
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-user-tie"></i>
+
+                        </div>
+
+                        <span class="info-label">
+                            Role / Designation
+                        </span>
+
+                    </div>
+
+                    <div class="info-value">
+                        {{ employee.role }}
+                    </div>
+
+                </div>
+
+
+                <!-- Joining Date -->
+
+                <div class="info-box">
+
+                    <div class="info-top">
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                        </div>
+
+                        <span class="info-label">
+                            Joining Date
+                        </span>
+
+                    </div>
+
+                    <div class="info-value">
+                        {{ employee.joining_date|date:"d M Y" }}
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="info-box">
+
+                    <div class="info-top">
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                        </div>
+
+                        <span class="info-label">
+                            Email
+                        </span>
+
+                    </div>
+
+                    <div class="info-value">
+
+                        {% if employee.email %}
+                            {{ employee.email }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="info-box">
+
+                    <div class="info-top">
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                        </div>
+
+                        <span class="info-label">
+                            Phone
+                        </span>
+
+                    </div>
+
+                    <div class="info-value">
+
+                        {% if employee.phone %}
+                            {{ employee.phone }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Username -->
+
+                <div class="info-box">
+
+                    <div class="info-top">
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+                        <span class="info-label">
+                            Login Username
+                        </span>
+
+                    </div>
+
+                    <div class="info-value">
+                        {{ user.username }}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <div class="stats-card">
+
+
+            <!-- Assigned -->
+
+            <div class="stat-box">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-laptop"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        {{ assigned_assets|length }}
+                    </span>
+
+                    <span class="stat-label">
+                        Assigned Assets
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Active -->
+
+            <div class="stat-box">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        {{ assigned_assets|length }}
+                    </span>
+
+                    <span class="stat-label">
+                        Active Assets
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Repair -->
+
+            <div class="stat-box">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Under Repair
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Returned -->
+
+            <div class="stat-box">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-box"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Returned Assets
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ASSIGNED ASSETS
+        ================================================== -->
+
+        <div class="assets-card">
+
+
+            <div class="assets-header">
+
+
+                <div class="assets-title">
+
+
+                    <div class="assets-icon">
+
+                        <i class="fa-solid fa-laptop-code"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            My Assigned Assets
+                        </h3>
+
+                        <p>
+                            Assets currently assigned to your account
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span class="asset-count">
+
+                    {{ assigned_assets|length }}
+                    Total Assets
+
+                </span>
+
+            </div>
+
+
+
+            {% if assigned_assets %}
+
+
+            <div class="asset-table-wrapper">
+
+
+                <table class="asset-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Asset ID
+                            </th>
+
+                            <th>
+                                Asset Name
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Brand / Model
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for asset in assigned_assets %}
+
+
+                    <tr>
+
+
+                        <!-- ID -->
+
+                        <td>
+
+                            <span class="asset-id">
+                                {{ asset.asset_id }}
+                            </span>
+
+                            <span class="asset-tag">
+                                {{ asset.asset_tag }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- NAME -->
+
+                        <td>
+
+                            <span class="asset-name">
+                                {{ asset.asset_name }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- TYPE -->
+
+                        <td>
+
+                            <div class="type">
+
+
+                                {% if asset.asset_type == "Laptop" %}
+
+                                    <i class="fa-solid fa-laptop"></i>
+
+                                {% elif asset.asset_type == "Desktop" %}
+
+                                    <i class="fa-solid fa-desktop"></i>
+
+                                {% elif asset.asset_type == "Monitor" %}
+
+                                    <i class="fa-solid fa-display"></i>
+
+                                {% elif asset.asset_type == "Printer" %}
+
+                                    <i class="fa-solid fa-print"></i>
+
+                                {% elif asset.asset_type == "Mobile" %}
+
+                                    <i class="fa-solid fa-mobile-screen"></i>
+
+                                {% elif asset.asset_type == "Tablet" %}
+
+                                    <i class="fa-solid fa-tablet-screen-button"></i>
+
+                                {% elif asset.asset_type == "Keyboard" %}
+
+                                    <i class="fa-solid fa-keyboard"></i>
+
+                                {% elif asset.asset_type == "Mouse" %}
+
+                                    <i class="fa-solid fa-computer-mouse"></i>
+
+                                {% else %}
+
+                                    <i class="fa-solid fa-cube"></i>
+
+                                {% endif %}
+
+
+                                {{ asset.asset_type }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- BRAND -->
+
+                        <td>
+
+                            <span class="brand">
+
+                                {% if asset.brand %}
+                                    {{ asset.brand }}
+                                {% endif %}
+
+                                {% if asset.model %}
+                                    / {{ asset.model }}
+                                {% endif %}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            {% if asset.status == "Assigned" %}
+
+                                <span class="status status-active">
+                                    Active
+                                </span>
+
+
+                            {% elif asset.status == "Repair" %}
+
+                                <span class="status status-repair">
+                                    Under Repair
+                                </span>
+
+
+                            {% elif asset.status == "Available" %}
+
+                                <span class="status status-available">
+                                    Available
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="status status-default">
+                                    {{ asset.status }}
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty-state">
+
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                </div>
+
+
+                <h3>
+                    No Assets Assigned
+                </h3>
+
+
+                <p>
+                    You currently don't have any assets assigned to you.
+                </p>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+{% elif role == "it_support" %}
+
+
+<!-- =====================================================
+     IT SUPPORT
+====================================================== -->
+
+<section class="profile-hero">
+
+    <div class="hero-content">
+
+        <div class="hero-small">
+            AssetFlow Management
+        </div>
+
+        <h1>
+            Welcome back, {{ user.username }} 👋
+        </h1>
+
+        <p>
+            Manage assets, employees and system
+            activity from your IT Support workspace.
+        </p>
+
+    </div>
+
+</section>
+
+
+<div class="it-card">
+
+
+    <div class="it-banner">
+
+        <div class="it-avatar">
+
+            <i class="fa-solid fa-user-shield"></i>
+
+        </div>
+
+        <div>
+
+            <h2>
+                {{ user.username }}
+            </h2>
+
+            <p>
+                IT Support · AssetFlow Administrator
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="information-grid">
+
+
+        <div class="info-box">
+
+            <div class="info-top">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <span class="info-label">
+                    Username
+                </span>
+
+            </div>
+
+            <div class="info-value">
+                {{ user.username }}
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-top">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <span class="info-label">
+                    Account Type
+                </span>
+
+            </div>
+
+            <div class="info-value">
+                IT Support
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-top">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+
+                <span class="info-label">
+                    Email
+                </span>
+
+            </div>
+
+            <div class="info-value">
+
+                {% if user.email %}
+                    {{ user.email }}
+                {% else %}
+                    Not provided
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-top">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+
+                <span class="info-label">
+                    Staff Access
+                </span>
+
+            </div>
+
+            <div class="info-value">
+                Authorized
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-top">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-calendar"></i>
+                </div>
+
+                <span class="info-label">
+                    Member Since
+                </span>
+
+            </div>
+
+            <div class="info-value">
+                {{ user.date_joined|date:"d M Y" }}
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-top">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+
+                <span class="info-label">
+                    Last Login
+                </span>
+
+            </div>
+
+            <div class="info-value">
+
+                {% if user.last_login %}
+                    {{ user.last_login|date:"d M Y" }}
+                {% else %}
+                    First Login
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% else %}
+
+
+<div class="empty-state">
+
+    <div class="empty-icon">
+
+        <i class="fa-solid fa-user-lock"></i>
+
+    </div>
+
+    <h3>
+        Profile Unavailable
+    </h3>
+
+    <p>
+        Your account role could not be identified.
+    </p>
+
+</div>
+
+
+{% endif %}
+
+
+</div>
+
+{% endblock %}

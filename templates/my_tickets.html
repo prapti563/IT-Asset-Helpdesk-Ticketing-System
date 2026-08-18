@@ -1,0 +1,1012 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Tickets | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .tickets-page {
+        max-width: 1650px;
+        margin: 0 auto;
+        padding: 30px 35px 50px;
+        color: #172033;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .tickets-hero {
+        min-height: 175px;
+        padding: 30px 36px;
+        margin-bottom: 24px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+
+        border-radius: 23px;
+        overflow: hidden;
+
+        background:
+            linear-gradient(
+                105deg,
+                rgba(8,17,32,.96),
+                rgba(23,40,69,.88)
+            ),
+            url("https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1800&q=90")
+            center/cover;
+
+        box-shadow:
+            0 15px 38px rgba(15,23,42,.14);
+    }
+
+    .hero-kicker {
+        margin-bottom: 8px;
+
+        color: #a9c7ff;
+
+        font-size: 12px;
+        font-weight: 750;
+
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+    }
+
+    .hero-title {
+        margin: 0;
+
+        color: #ffffff;
+
+        font-size: clamp(28px, 3vw, 39px);
+        font-weight: 800;
+        line-height: 1.12;
+    }
+
+    .hero-subtitle {
+        margin: 9px 0 0;
+
+        color: #cbd5e1;
+
+        font-size: 14px;
+    }
+
+    .hero-badge {
+        padding: 13px 18px;
+
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: 14px;
+
+        background: rgba(255,255,255,.09);
+
+        backdrop-filter: blur(14px);
+
+        color: #ffffff;
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    .summary-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 18px;
+
+        margin-bottom: 23px;
+    }
+
+    .summary-card {
+        min-height: 110px;
+
+        padding: 20px;
+
+        display: flex;
+        align-items: center;
+
+        gap: 15px;
+
+        background: #ffffff;
+
+        border: 1px solid #e4e9f0;
+        border-radius: 18px;
+
+        box-shadow:
+            0 8px 23px rgba(15,23,42,.055);
+    }
+
+    .summary-icon {
+        width: 55px;
+        height: 55px;
+
+        flex: 0 0 55px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 15px;
+
+        background: #f1f5f9;
+
+        font-size: 27px;
+    }
+
+    .summary-card:nth-child(1) .summary-icon {
+        background: #edf4ff;
+    }
+
+    .summary-card:nth-child(2) .summary-icon {
+        background: #fff5eb;
+    }
+
+    .summary-card:nth-child(3) .summary-icon {
+        background: #f1f0ff;
+    }
+
+    .summary-card:nth-child(4) .summary-icon {
+        background: #eefbf5;
+    }
+
+    .summary-label {
+        margin: 0 0 5px;
+
+        color: #7b879a;
+
+        font-size: 12px;
+        font-weight: 650;
+    }
+
+    .summary-number {
+        color: #182237;
+
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+
+    /* =========================
+       TICKETS PANEL
+    ========================= */
+
+    .tickets-panel {
+        background: #ffffff;
+
+        border: 1px solid #e4e9f0;
+        border-radius: 20px;
+
+        overflow: hidden;
+
+        box-shadow:
+            0 9px 28px rgba(15,23,42,.06);
+    }
+
+    .panel-header {
+        padding: 20px 24px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        border-bottom: 1px solid #edf0f4;
+    }
+
+    .panel-title {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .panel-icon {
+        width: 44px;
+        height: 44px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 12px;
+
+        background: #f1f5f9;
+
+        font-size: 23px;
+    }
+
+    .panel-title h2 {
+        margin: 0;
+
+        color: #182237;
+
+        font-size: 19px;
+        font-weight: 780;
+    }
+
+    .panel-title p {
+        margin: 3px 0 0;
+
+        color: #8993a5;
+
+        font-size: 12px;
+    }
+
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrap {
+        width: 100%;
+
+        overflow-x: auto;
+    }
+
+    .ticket-table {
+        width: 100%;
+
+        min-width: 1000px;
+
+        border-collapse: collapse;
+    }
+
+    .ticket-table th {
+        padding: 14px 19px;
+
+        text-align: left;
+
+        background: #fbfcfd;
+
+        border-bottom: 1px solid #e9edf2;
+
+        color: #7c8799;
+
+        font-size: 10px;
+        font-weight: 800;
+
+        text-transform: uppercase;
+
+        letter-spacing: .7px;
+    }
+
+    .ticket-table td {
+        padding: 16px 19px;
+
+        border-bottom: 1px solid #eef1f4;
+
+        color: #354156;
+
+        font-size: 13px;
+
+        vertical-align: middle;
+    }
+
+    .ticket-table tbody tr:hover {
+        background: #fafcff;
+    }
+
+
+    /* =========================
+       TICKET ID
+    ========================= */
+
+    .ticket-id {
+        color: #315ea8;
+
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .ticket-title {
+        margin-top: 4px;
+
+        color: #1d293d;
+
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+
+    /* =========================
+       ASSET
+    ========================= */
+
+    .asset-cell {
+        display: flex;
+        align-items: center;
+
+        gap: 10px;
+    }
+
+    .asset-icon {
+        width: 38px;
+        height: 38px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 10px;
+
+        background: #edf4ff;
+
+        font-size: 19px;
+    }
+
+    .asset-name {
+        color: #465268;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .asset-id {
+        margin-top: 3px;
+
+        color: #919aaa;
+
+        font-size: 10px;
+    }
+
+
+    /* =========================
+       CATEGORY
+    ========================= */
+
+    .category-badge {
+        display: inline-flex;
+
+        padding: 7px 10px;
+
+        border-radius: 8px;
+
+        background: #f1f5f9;
+
+        color: #526176;
+
+        font-size: 10px;
+        font-weight: 750;
+    }
+
+
+    /* =========================
+       PRIORITY
+    ========================= */
+
+    .priority-badge {
+        display: inline-flex;
+
+        padding: 7px 10px;
+
+        border-radius: 20px;
+
+        font-size: 10px;
+        font-weight: 750;
+    }
+
+    .priority-low {
+        background: #eefbf5;
+        color: #18794e;
+    }
+
+    .priority-medium {
+        background: #fff7df;
+        color: #8b6415;
+    }
+
+    .priority-high {
+        background: #fff0e8;
+        color: #b65d25;
+    }
+
+    .priority-critical {
+        background: #ffecec;
+        color: #b33d3d;
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status-badge {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        padding: 7px 10px;
+
+        border-radius: 20px;
+
+        font-size: 10px;
+        font-weight: 750;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+    }
+
+    .status-open {
+        background: #edf4ff;
+        color: #315ea8;
+    }
+
+    .status-open .status-dot {
+        background: #4d82d9;
+    }
+
+    .status-progress {
+        background: #fff7df;
+        color: #8b6415;
+    }
+
+    .status-progress .status-dot {
+        background: #e0a82e;
+    }
+
+    .status-resolved {
+        background: #eefbf5;
+        color: #18794e;
+    }
+
+    .status-resolved .status-dot {
+        background: #21a366;
+    }
+
+    .status-closed {
+        background: #f1f5f9;
+        color: #667085;
+    }
+
+    .status-closed .status-dot {
+        background: #8792a3;
+    }
+
+
+    /* =========================
+       EMPTY STATE
+    ========================= */
+
+    .empty-state {
+        padding: 75px 20px;
+
+        text-align: center;
+    }
+
+    .empty-icon {
+        margin-bottom: 12px;
+
+        font-size: 50px;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 6px;
+
+        color: #273449;
+
+        font-size: 17px;
+    }
+
+    .empty-state p {
+        margin: 0;
+
+        color: #8b95a5;
+
+        font-size: 12px;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 1100px) {
+
+        .tickets-page {
+            padding: 22px;
+        }
+
+        .summary-grid {
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    @media (max-width: 700px) {
+
+        .tickets-page {
+            padding: 15px 12px 30px;
+        }
+
+        .tickets-hero {
+            min-height: 155px;
+
+            padding: 22px;
+
+            border-radius: 18px;
+
+            align-items: flex-start;
+
+            flex-direction: column;
+        }
+
+        .hero-title {
+            font-size: 25px;
+        }
+
+        .hero-subtitle {
+            font-size: 11px;
+        }
+
+        .summary-grid {
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .summary-card {
+            min-height: 95px;
+
+            padding: 14px;
+
+            gap: 10px;
+        }
+
+        .summary-icon {
+            width: 45px;
+            height: 45px;
+
+            flex-basis: 45px;
+
+            font-size: 23px;
+        }
+
+        .summary-number {
+            font-size: 23px;
+        }
+
+        .panel-header {
+            padding: 16px;
+
+            align-items: flex-start;
+        }
+    }
+
+
+    @media (max-width: 430px) {
+
+        .summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-title {
+            font-size: 23px;
+        }
+    }
+
+</style>
+
+
+<div class="tickets-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="tickets-hero">
+
+        <div>
+
+            <div class="hero-kicker">
+                🎫 Support Center
+            </div>
+
+            <h1 class="hero-title">
+                My Support Tickets
+            </h1>
+
+            <p class="hero-subtitle">
+                Track the issues you've reported for your assigned assets.
+            </p>
+
+        </div>
+
+        <div class="hero-badge">
+            👤 Employee Portal
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <section class="summary-grid">
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🎫
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Total Tickets
+                </p>
+
+                <span class="summary-number">
+                    {{ total_tickets }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🔵
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Open
+                </p>
+
+                <span class="summary-number">
+                    {{ open_tickets }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🟡
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    In Progress
+                </p>
+
+                <span class="summary-number">
+                    {{ progress_tickets }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🟢
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Resolved
+                </p>
+
+                <span class="summary-number">
+                    {{ resolved_tickets }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TICKETS PANEL
+    ====================================================== -->
+
+    <section class="tickets-panel">
+
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+
+                <div class="panel-icon">
+                    🗂️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Ticket History
+                    </h2>
+
+                    <p>
+                        All support tickets raised by you
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% if tickets %}
+
+        <div class="table-wrap">
+
+            <table class="ticket-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Ticket
+                        </th>
+
+                        <th>
+                            Asset
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for ticket in tickets %}
+
+                    <tr>
+
+
+                        <!-- TICKET -->
+
+                        <td>
+
+                            <div class="ticket-id">
+                                {{ ticket.ticket_id }}
+                            </div>
+
+                            <div class="ticket-title">
+                                {{ ticket.title }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- ASSET -->
+
+                        <td>
+
+                            <div class="asset-cell">
+
+                                <div class="asset-icon">
+
+                                    {% if ticket.asset.asset_type == "Laptop" %}
+                                        💻
+
+                                    {% elif ticket.asset.asset_type == "Desktop" %}
+                                        🖥️
+
+                                    {% elif ticket.asset.asset_type == "Monitor" %}
+                                        🖥️
+
+                                    {% elif ticket.asset.asset_type == "Printer" %}
+                                        🖨️
+
+                                    {% elif ticket.asset.asset_type == "Phone" %}
+                                        📱
+
+                                    {% else %}
+                                        📦
+                                    {% endif %}
+
+                                </div>
+
+                                <div>
+
+                                    <div class="asset-name">
+                                        {{ ticket.asset.asset_name }}
+                                    </div>
+
+                                    <div class="asset-id">
+                                        {{ ticket.asset.asset_id }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            <span class="category-badge">
+                                {{ ticket.category }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- PRIORITY -->
+
+                        <td>
+
+                            {% if ticket.priority == "Low" %}
+
+                                <span class="priority-badge priority-low">
+                                    Low
+                                </span>
+
+                            {% elif ticket.priority == "Medium" %}
+
+                                <span class="priority-badge priority-medium">
+                                    Medium
+                                </span>
+
+                            {% elif ticket.priority == "High" %}
+
+                                <span class="priority-badge priority-high">
+                                    High
+                                </span>
+
+                            {% elif ticket.priority == "Critical" %}
+
+                                <span class="priority-badge priority-critical">
+                                    Critical
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if ticket.status == "Open" %}
+
+                                <span class="status-badge status-open">
+
+                                    <span class="status-dot"></span>
+
+                                    Open
+
+                                </span>
+
+                            {% elif ticket.status == "In Progress" %}
+
+                                <span class="status-badge status-progress">
+
+                                    <span class="status-dot"></span>
+
+                                    In Progress
+
+                                </span>
+
+                            {% elif ticket.status == "Resolved" %}
+
+                                <span class="status-badge status-resolved">
+
+                                    <span class="status-dot"></span>
+
+                                    Resolved
+
+                                </span>
+
+                            {% elif ticket.status == "Closed" %}
+
+                                <span class="status-badge status-closed">
+
+                                    <span class="status-dot"></span>
+
+                                    Closed
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- CREATED -->
+
+                        <td>
+
+                            <span style="
+                                color:#69758a;
+                                font-size:12px;
+                            ">
+
+                                {{ ticket.created_at|date:"d M Y" }}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- EMPTY -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                🎫
+            </div>
+
+            <h3>
+                No support tickets yet
+            </h3>
+
+            <p>
+                You haven't raised any support tickets for your assigned assets.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

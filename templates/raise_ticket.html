@@ -1,0 +1,882 @@
+{% extends "base.html" %}
+
+{% block title %}
+Raise Support Ticket | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   RAISE TICKET PAGE
+   ========================================================= */
+
+.ticket-page {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 30px 34px 60px;
+    color: #172033;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.ticket-hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 32px 36px;
+    margin-bottom: 24px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            105deg,
+            rgba(8,17,32,.97),
+            rgba(29,54,92,.92)
+        );
+
+    box-shadow:
+        0 15px 35px rgba(15,23,42,.14);
+}
+
+.ticket-hero::after {
+    content: "🎫";
+
+    position: absolute;
+    right: 45px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 95px;
+
+    opacity: .12;
+}
+
+.ticket-kicker {
+    margin-bottom: 8px;
+
+    color: #9fc1ff;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.ticket-title {
+    margin: 0;
+
+    color: white;
+
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.ticket-subtitle {
+    margin: 9px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.ticket-grid {
+    display: grid;
+
+    grid-template-columns:
+        0.9fr 1.4fr;
+
+    gap: 22px;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.ticket-card {
+    background: white;
+
+    border: 1px solid #e4e9f0;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 28px rgba(15,23,42,.06);
+
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 21px 24px;
+
+    border-bottom:
+        1px solid #edf0f4;
+
+    background: #fbfcfe;
+}
+
+.card-header h2 {
+    margin: 0;
+
+    color: #182237;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.card-header p {
+    margin: 4px 0 0;
+
+    color: #8993a5;
+
+    font-size: 12px;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+
+/* =========================================================
+   ASSET INFORMATION
+   ========================================================= */
+
+.asset-box {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background: #f7f9fc;
+
+    border: 1px solid #e8edf3;
+}
+
+.asset-icon {
+    width: 55px;
+    height: 55px;
+
+    flex: 0 0 55px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 14px;
+
+    background: #edf4ff;
+
+    font-size: 28px;
+}
+
+.asset-name {
+    color: #1c2940;
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.asset-id {
+    margin-top: 4px;
+
+    color: #8a94a5;
+
+    font-size: 11px;
+}
+
+.asset-details {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 14px;
+}
+
+.detail-box {
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: #fafbfc;
+
+    border: 1px solid #edf0f4;
+}
+
+.detail-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8a94a5;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+.detail-value {
+    color: #354156;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #29364c;
+
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.required {
+    color: #e05a5a;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+
+    border: 1px solid #dce2ea;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: #273449;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: .2s ease;
+}
+
+.form-input,
+.form-select {
+    height: 46px;
+
+    padding: 0 14px;
+}
+
+.form-textarea {
+    min-height: 145px;
+
+    padding: 13px 14px;
+
+    resize: vertical;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: #a0a8b5;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: #4c7ed8;
+
+    box-shadow:
+        0 0 0 3px rgba(76,126,216,.10);
+}
+
+
+/* =========================================================
+   TWO COLUMNS
+   ========================================================= */
+
+.form-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+}
+
+
+/* =========================================================
+   PRIORITY
+   ========================================================= */
+
+.priority-hint {
+    margin-top: 6px;
+
+    color: #9099a8;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.form-actions {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 8px;
+
+    border-top:
+        1px solid #edf0f4;
+}
+
+.cancel-btn,
+.submit-btn {
+    height: 43px;
+
+    padding: 0 19px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.cancel-btn {
+    color: #596579;
+
+    background: #f4f6f8;
+
+    border: 1px solid #e1e5ea;
+}
+
+.cancel-btn:hover {
+    background: #e9edf2;
+
+    color: #344054;
+}
+
+.submit-btn {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #315edb
+        );
+
+    border: none;
+
+    box-shadow:
+        0 7px 16px rgba(37,99,235,.20);
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 20px rgba(37,99,235,.27);
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.ticket-note {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+    padding: 13px 14px;
+
+    border-radius: 11px;
+
+    background: #f7fbff;
+
+    border: 1px solid #dce9f8;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.note-icon {
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .ticket-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-hero::after {
+        display: none;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .ticket-page {
+        padding: 18px 12px 40px;
+    }
+
+    .ticket-hero {
+        padding: 25px 22px;
+
+        border-radius: 18px;
+    }
+
+    .ticket-title {
+        font-size: 27px;
+    }
+
+    .ticket-subtitle {
+        font-size: 12px;
+    }
+
+    .asset-details,
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .card-body {
+        padding: 18px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-btn,
+    .submit-btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<div class="ticket-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="ticket-hero">
+
+        <div class="ticket-kicker">
+            🎫 Support Center
+        </div>
+
+        <h1 class="ticket-title">
+            Raise Support Ticket
+        </h1>
+
+        <p class="ticket-subtitle">
+            Report an issue with your assigned asset and our IT Support team will assist you.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ====================================================== -->
+
+    <div class="ticket-grid">
+
+
+        <!-- =================================================
+             ASSET INFORMATION
+        ================================================== -->
+
+        <section class="ticket-card">
+
+            <div class="card-header">
+
+                <h2>
+                    🖥️ Asset Information
+                </h2>
+
+                <p>
+                    Details of the asset you're reporting
+                </p>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <div class="asset-box">
+
+                    <div class="asset-icon">
+
+                        {% if asset.asset_type == "Laptop" %}
+                            💻
+                        {% elif asset.asset_type == "Desktop" %}
+                            🖥️
+                        {% elif asset.asset_type == "Monitor" %}
+                            🖥️
+                        {% elif asset.asset_type == "Printer" %}
+                            🖨️
+                        {% elif asset.asset_type == "Phone" %}
+                            📱
+                        {% else %}
+                            📦
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="asset-name">
+                            {{ asset.asset_name }}
+                        </div>
+
+                        <div class="asset-id">
+                            Asset ID: {{ asset.asset_id }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="asset-details">
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Asset ID
+                        </span>
+
+                        <span class="detail-value">
+                            {{ asset.asset_id }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Asset Type
+                        </span>
+
+                        <span class="detail-value">
+                            {{ asset.asset_type }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Brand
+                        </span>
+
+                        <span class="detail-value">
+                            {{ asset.brand }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Model
+                        </span>
+
+                        <span class="detail-value">
+                            {{ asset.model|default:"—" }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="ticket-note">
+
+                    <span class="note-icon">
+                        🔐
+                    </span>
+
+                    <span>
+                        This ticket will automatically be linked to your account and this assigned asset.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TICKET FORM
+        ================================================== -->
+
+        <section class="ticket-card">
+
+            <div class="card-header">
+
+                <h2>
+                    📝 Issue Details
+                </h2>
+
+                <p>
+                    Tell us what problem you are experiencing
+                </p>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <form
+                    method="POST"
+                    action="{% url 'raise_ticket' asset.id %}"
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- ISSUE TITLE -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Issue Title
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-input"
+                            placeholder="Example: Monitor is not displaying properly"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- CATEGORY + PRIORITY -->
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Category
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                name="category"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Category
+                                </option>
+
+                                <option value="Hardware">
+                                    🖥️ Hardware
+                                </option>
+
+                                <option value="Software">
+                                    💿 Software
+                                </option>
+
+                                <option value="Network">
+                                    🌐 Network
+                                </option>
+
+                                <option value="Access">
+                                    🔐 Access / Login
+                                </option>
+
+                                <option value="Other">
+                                    📦 Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Priority
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                name="priority"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Priority
+                                </option>
+
+                                <option value="Low">
+                                    🟢 Low
+                                </option>
+
+                                <option value="Medium">
+                                    🟡 Medium
+                                </option>
+
+                                <option value="High">
+                                    🟠 High
+                                </option>
+
+                                <option value="Critical">
+                                    🔴 Critical
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Problem Description
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            name="description"
+                            class="form-textarea"
+                            placeholder="Describe the problem in detail..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="form-actions">
+
+                        <a
+                            href="{% url 'asset_detail' asset.id %}"
+                            class="cancel-btn"
+                        >
+                            ← Cancel
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="submit-btn"
+                        >
+                            🎫 Raise Ticket
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

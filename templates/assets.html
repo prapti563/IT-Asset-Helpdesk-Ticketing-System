@@ -1,0 +1,1705 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Assets | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   ASSETFLOW ASSET PAGE
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+.assets-page {
+    width: 100%;
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 26px 34px 50px;
+    color: #172033;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.assets-hero {
+    position: relative;
+    min-height: 175px;
+    width: 100%;
+    border-radius: 23px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 30px 36px;
+    margin-bottom: 24px;
+
+    background:
+        linear-gradient(
+            105deg,
+            rgba(8,17,32,.96),
+            rgba(23,40,69,.88)
+        ),
+        url("https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=90")
+        center/cover;
+
+    box-shadow:
+        0 15px 38px rgba(15,23,42,.14);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: #a9c7ff;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.hero-kicker span {
+    font-size: 16px;
+}
+
+.hero-title {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: clamp(28px, 3vw, 39px);
+    line-height: 1.12;
+
+    font-weight: 800;
+
+    letter-spacing: -.9px;
+}
+
+.hero-subtitle {
+    margin: 9px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   ROLE
+   ========================================================= */
+
+.hero-role {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 175px;
+
+    padding: 12px 16px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    background: rgba(255,255,255,.09);
+
+    backdrop-filter: blur(14px);
+
+    color: white;
+}
+
+.role-symbol {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    background: rgba(255,255,255,.13);
+
+    font-size: 22px;
+}
+
+.role-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.role-info small {
+    color: #aab7ca;
+    font-size: 11px;
+}
+
+.role-info strong {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.summary-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 23px;
+}
+
+.summary-card {
+    min-height: 118px;
+
+    padding: 20px 22px;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5eaf1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+
+    box-shadow:
+        0 8px 23px rgba(15,23,42,.055);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 30px rgba(15,23,42,.09);
+}
+
+.summary-icon {
+    width: 61px;
+    height: 61px;
+
+    flex: 0 0 61px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+
+    background: #f3f6fa;
+
+    font-size: 31px;
+}
+
+.summary-card:nth-child(1) .summary-icon {
+    background: #edf4ff;
+}
+
+.summary-card:nth-child(2) .summary-icon {
+    background: #f1f0ff;
+}
+
+.summary-card:nth-child(3) .summary-icon {
+    background: #eefbf5;
+}
+
+.summary-card:nth-child(4) .summary-icon {
+    background: #fff5eb;
+}
+
+.summary-label {
+    margin: 0 0 6px;
+
+    color: #748096;
+
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.summary-number {
+    display: block;
+
+    color: #182237;
+
+    font-size: 31px;
+    line-height: 1;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   EMPLOYEE NOTICE
+   ========================================================= */
+
+.employee-notice {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px 18px;
+
+    margin-bottom: 21px;
+
+    border: 1px solid #dce8f7;
+
+    border-radius: 15px;
+
+    background: #f7fbff;
+
+    color: #30425d;
+}
+
+.notice-icon {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    background: #e8f1ff;
+
+    font-size: 22px;
+}
+
+.notice-text strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 14px;
+}
+
+.notice-text span {
+    font-size: 12px;
+
+    color: #718096;
+}
+
+
+/* =========================================================
+   INVENTORY PANEL
+   ========================================================= */
+
+.inventory-panel {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e9f0;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 9px 28px rgba(15,23,42,.06);
+}
+
+.panel-header {
+    padding: 20px 24px;
+
+    border-bottom: 1px solid #edf0f4;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.panel-title-icon {
+    width: 44px;
+    height: 44px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+
+    background: #f1f5f9;
+
+    font-size: 23px;
+}
+
+.panel-title h2 {
+    margin: 0;
+
+    color: #182237;
+
+    font-size: 19px;
+    font-weight: 780;
+}
+
+.panel-title p {
+    margin: 3px 0 0;
+
+    color: #8993a5;
+
+    font-size: 12px;
+}
+
+.add-asset-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 42px;
+
+    padding: 0 17px;
+
+    border-radius: 10px;
+
+    background: #182237;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    transition: .2s ease;
+}
+
+.add-asset-btn:hover {
+    background: #263652;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+.filter-area {
+    padding: 17px 24px;
+
+    background: #fafbfc;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.filter-form {
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr auto auto;
+
+    gap: 11px;
+
+    align-items: center;
+}
+
+.input-box,
+.select-box {
+    width: 100%;
+
+    height: 44px;
+
+    border: 1px solid #dfe4eb;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    padding: 0 13px;
+
+    color: #273449;
+
+    font-size: 12px;
+
+    outline: none;
+}
+
+.input-box:focus,
+.select-box:focus {
+    border-color: #91a7c7;
+
+    box-shadow:
+        0 0 0 3px rgba(80,120,180,.08);
+}
+
+.filter-btn,
+.clear-btn {
+    height: 44px;
+
+    padding: 0 17px;
+
+    border-radius: 10px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+.filter-btn {
+    border: 0;
+
+    background: #273852;
+
+    color: #ffffff;
+}
+
+.clear-btn {
+    border: 1px solid #dfe4eb;
+
+    background: #ffffff;
+
+    color: #566277;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrap {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.asset-table {
+    width: 100%;
+
+    min-width: 1200px;
+
+    border-collapse: collapse;
+}
+
+.asset-table th {
+    padding: 14px 19px;
+
+    text-align: left;
+
+    background: #fbfcfd;
+
+    border-bottom: 1px solid #e9edf2;
+
+    color: #7c8799;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+}
+
+.asset-table td {
+    padding: 16px 19px;
+
+    border-bottom: 1px solid #eef1f4;
+
+    color: #354156;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+.asset-table tbody tr {
+    transition: .15s ease;
+}
+
+.asset-table tbody tr:hover {
+    background: #fafcff;
+}
+
+
+/* =========================================================
+   ASSET
+   ========================================================= */
+
+.asset-main {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.asset-symbol {
+    width: 44px;
+    height: 44px;
+
+    flex: 0 0 44px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    background: #f3f6fa;
+
+    font-size: 24px;
+}
+
+.asset-name {
+    color: #1d293d;
+
+    font-size: 13px;
+
+    font-weight: 750;
+}
+
+.asset-id {
+    margin-top: 3px;
+
+    color: #919aaa;
+
+    font-size: 10px;
+}
+
+.asset-tag {
+    color: #566277;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.brand {
+    color: #4c5870;
+
+    font-size: 12px;
+
+    font-weight: 650;
+}
+
+.type-text {
+    color: #5d687c;
+
+    font-size: 12px;
+
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 750;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+.status-available {
+    background: #ecfdf4;
+    color: #18794e;
+}
+
+.status-available .status-dot {
+    background: #21a366;
+}
+
+.status-assigned {
+    background: #edf4ff;
+    color: #315ea8;
+}
+
+.status-assigned .status-dot {
+    background: #4d82d9;
+}
+
+.status-repair {
+    background: #fff4e8;
+    color: #a85c14;
+}
+
+.status-repair .status-dot {
+    background: #e98b2a;
+}
+
+
+/* =========================================================
+   EMPLOYEE
+   ========================================================= */
+
+.employee-cell {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.employee-avatar {
+    width: 33px;
+    height: 33px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #edf1f7;
+
+    font-size: 17px;
+}
+
+.employee-name {
+    color: #465268;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+
+    white-space: nowrap;
+}
+
+.action-btn {
+    min-width: 68px;
+
+    height: 34px;
+
+    padding: 0 10px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 750;
+
+    transition: .18s ease;
+}
+
+.action-symbol {
+    font-size: 13px;
+}
+
+.action-view {
+    color: #3f5f8d;
+    background: #edf4ff;
+}
+
+.action-edit {
+    color: #8b6415;
+    background: #fff7df;
+}
+
+.action-delete {
+    color: #a74343;
+    background: #fff0f0;
+}
+
+
+/* =========================================================
+   RAISE TICKET BUTTON
+   ========================================================= */
+
+.action-ticket {
+    color: #7b4b00;
+
+    background: #fff4d6;
+
+    border: 1px solid #f4df9e;
+}
+
+.action-ticket:hover {
+    background: #ffeab5;
+
+    color: #6b4100;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-state {
+    padding: 70px 20px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    margin-bottom: 12px;
+
+    font-size: 50px;
+}
+
+.empty-state h3 {
+    margin: 0 0 6px;
+
+    color: #273449;
+
+    font-size: 17px;
+}
+
+.empty-state p {
+    margin: 0;
+
+    color: #8b95a5;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .assets-page {
+        padding: 22px;
+    }
+
+    .summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .filter-form {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .filter-btn,
+    .clear-btn {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .assets-page {
+        padding: 15px 12px 30px;
+    }
+
+    .assets-hero {
+        min-height: 155px;
+
+        padding: 21px;
+
+        border-radius: 18px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 16px;
+    }
+
+    .hero-title {
+        font-size: 25px;
+    }
+
+    .hero-subtitle {
+        font-size: 11px;
+    }
+
+    .hero-role {
+        min-width: auto;
+
+        padding: 9px 12px;
+    }
+
+    .summary-grid {
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 10px;
+    }
+
+    .summary-card {
+        min-height: 98px;
+
+        padding: 14px;
+
+        gap: 10px;
+    }
+
+    .summary-icon {
+        width: 46px;
+        height: 46px;
+
+        flex-basis: 46px;
+
+        font-size: 24px;
+    }
+
+    .summary-label {
+        font-size: 10px;
+    }
+
+    .summary-number {
+        font-size: 23px;
+    }
+
+    .panel-header {
+        padding: 16px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .add-asset-btn {
+        width: 100%;
+    }
+
+    .filter-area {
+        padding: 13px;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .employee-notice {
+        padding: 12px;
+    }
+}
+
+
+@media (max-width: 430px) {
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+        font-size: 23px;
+    }
+
+    .hero-kicker {
+        font-size: 10px;
+    }
+
+    .panel-title h2 {
+        font-size: 17px;
+    }
+}
+
+</style>
+
+
+<div class="assets-page">
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="assets-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-kicker">
+                <span>◈</span>
+                Asset Inventory
+            </div>
+
+            <h1 class="hero-title">
+                Every device. Accounted for.
+            </h1>
+
+            <p class="hero-subtitle">
+                Track, assign and manage your IT equipment.
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN ROLE -->
+
+        <div class="hero-role">
+
+            {% if request.session.role == "it_support" %}
+
+                <div class="role-symbol">
+                    🛠️
+                </div>
+
+                <div class="role-info">
+                    <small>Logged in as</small>
+                    <strong>IT Support</strong>
+                </div>
+
+            {% else %}
+
+                <div class="role-symbol">
+                    👤
+                </div>
+
+                <div class="role-info">
+                    <small>Logged in as</small>
+                    <strong>Employee</strong>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SUMMARY
+         ===================================================== -->
+
+    <section class="summary-grid">
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🖥️
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Total Inventory
+                </p>
+
+                <span class="summary-number">
+                    {{ total_assets }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                👤
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Assigned
+                </p>
+
+                <span class="summary-number">
+                    {{ assigned_assets }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📦
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Available
+                </p>
+
+                <span class="summary-number">
+                    {{ available_assets }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🔧
+            </div>
+
+            <div>
+
+                <p class="summary-label">
+                    Repair
+                </p>
+
+                <span class="summary-number">
+                    {{ repair_assets }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         EMPLOYEE NOTICE
+         ===================================================== -->
+
+    {% if request.session.role != "it_support" %}
+
+    <div class="employee-notice">
+
+        <div class="notice-icon">
+            🔐
+        </div>
+
+        <div class="notice-text">
+
+            <strong>
+                Employee access
+            </strong>
+
+            <span>
+                You can view your assigned assets and raise support tickets.
+            </span>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         INVENTORY PANEL
+         ===================================================== -->
+
+    <section class="inventory-panel">
+
+
+        <!-- PANEL HEADER -->
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+
+                <div class="panel-title-icon">
+                    🗃️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Asset Inventory
+                    </h2>
+
+                    <p>
+                        All registered devices and equipment
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if request.session.role == "it_support" %}
+
+            <a
+                href="{% url 'asset_add' %}"
+                class="add-asset-btn"
+            >
+                ＋ Add Asset
+            </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             FILTERS
+             ================================================= -->
+
+        <div class="filter-area">
+
+            <form
+                method="GET"
+                class="filter-form"
+            >
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    class="input-box"
+                    placeholder="Search asset name, ID or tag..."
+                >
+
+
+                <select
+                    name="asset_type"
+                    class="select-box"
+                >
+
+                    <option value="">
+                        All Types
+                    </option>
+
+                    <option
+                        value="Laptop"
+                        {% if selected_type == "Laptop" %}selected{% endif %}
+                    >
+                        💻 Laptop
+                    </option>
+
+                    <option
+                        value="Desktop"
+                        {% if selected_type == "Desktop" %}selected{% endif %}
+                    >
+                        🖥️ Desktop
+                    </option>
+
+                    <option
+                        value="Monitor"
+                        {% if selected_type == "Monitor" %}selected{% endif %}
+                    >
+                        🖥️ Monitor
+                    </option>
+
+                    <option
+                        value="Printer"
+                        {% if selected_type == "Printer" %}selected{% endif %}
+                    >
+                        🖨️ Printer
+                    </option>
+
+                    <option
+                        value="Phone"
+                        {% if selected_type == "Phone" %}selected{% endif %}
+                    >
+                        📱 Phone
+                    </option>
+
+                    <option
+                        value="Other"
+                        {% if selected_type == "Other" %}selected{% endif %}
+                    >
+                        📦 Other
+                    </option>
+
+                </select>
+
+
+                <select
+                    name="status"
+                    class="select-box"
+                >
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option
+                        value="Available"
+                        {% if selected_status == "Available" %}selected{% endif %}
+                    >
+                        Available
+                    </option>
+
+                    <option
+                        value="Assigned"
+                        {% if selected_status == "Assigned" %}selected{% endif %}
+                    >
+                        Assigned
+                    </option>
+
+                    <option
+                        value="Repair"
+                        {% if selected_status == "Repair" %}selected{% endif %}
+                    >
+                        Repair
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="filter-btn"
+                >
+                    Filter
+                </button>
+
+
+                <a
+                    href="{% url 'assets' %}"
+                    class="clear-btn"
+                >
+                    Clear
+                </a>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+             ================================================= -->
+
+        {% if assets %}
+
+        <div class="table-wrap">
+
+            <table class="asset-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Asset
+                        </th>
+
+                        <th>
+                            Tag
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Brand
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Assigned To
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for asset in assets %}
+
+                    <tr>
+
+
+                        <!-- ASSET -->
+
+                        <td>
+
+                            <div class="asset-main">
+
+                                <div class="asset-symbol">
+
+                                    {% if asset.asset_type == "Laptop" %}
+                                        💻
+                                    {% elif asset.asset_type == "Desktop" %}
+                                        🖥️
+                                    {% elif asset.asset_type == "Monitor" %}
+                                        🖥️
+                                    {% elif asset.asset_type == "Printer" %}
+                                        🖨️
+                                    {% elif asset.asset_type == "Phone" %}
+                                        📱
+                                    {% else %}
+                                        📦
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="asset-name">
+                                        {{ asset.asset_name }}
+                                    </div>
+
+                                    <div class="asset-id">
+                                        ID: {{ asset.asset_id }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- TAG -->
+
+                        <td>
+
+                            <span class="asset-tag">
+                                {{ asset.asset_tag }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- TYPE -->
+
+                        <td>
+
+                            <span class="type-text">
+
+                                {% if asset.asset_type == "Laptop" %}
+                                    💻 Laptop
+                                {% elif asset.asset_type == "Desktop" %}
+                                    🖥️ Desktop
+                                {% elif asset.asset_type == "Monitor" %}
+                                    🖥️ Monitor
+                                {% elif asset.asset_type == "Printer" %}
+                                    🖨️ Printer
+                                {% elif asset.asset_type == "Phone" %}
+                                    📱 Phone
+                                {% else %}
+                                    📦 Other
+                                {% endif %}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- BRAND -->
+
+                        <td>
+
+                            <span class="brand">
+                                {{ asset.brand }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if asset.status == "Available" %}
+
+                                <span class="status-badge status-available">
+
+                                    <span class="status-dot"></span>
+
+                                    Available
+
+                                </span>
+
+                            {% elif asset.status == "Assigned" %}
+
+                                <span class="status-badge status-assigned">
+
+                                    <span class="status-dot"></span>
+
+                                    Assigned
+
+                                </span>
+
+                            {% elif asset.status == "Repair" %}
+
+                                <span class="status-badge status-repair">
+
+                                    <span class="status-dot"></span>
+
+                                    Repair
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge">
+                                    {{ asset.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- EMPLOYEE -->
+
+                        <td>
+
+                            {% if asset.assigned_employee %}
+
+                                <div class="employee-cell">
+
+                                    <div class="employee-avatar">
+                                        👤
+                                    </div>
+
+                                    <span class="employee-name">
+                                        {{ asset.assigned_employee.name }}
+                                    </span>
+
+                                </div>
+
+                            {% else %}
+
+                                <span
+                                    style="
+                                    color:#9aa3b2;
+                                    font-size:12px;
+                                    "
+                                >
+                                    —
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ACTIONS
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="actions">
+
+
+                                <!-- VIEW -->
+
+                                <a
+                                    href="{% url 'asset_detail' asset.id %}"
+                                    class="action-btn action-view"
+                                >
+
+                                    <span class="action-symbol">
+                                        👁️
+                                    </span>
+
+                                    View
+
+                                </a>
+
+
+                                <!-- =========================================
+                                     IT SUPPORT ACTIONS
+                                     ========================================= -->
+
+                                {% if request.session.role == "it_support" %}
+
+
+                                    <!-- EDIT -->
+
+                                    <a
+                                        href="{% url 'asset_edit' asset.id %}"
+                                        class="action-btn action-edit"
+                                    >
+
+                                        <span class="action-symbol">
+                                            ✏️
+                                        </span>
+
+                                        Edit
+
+                                    </a>
+
+
+                                    <!-- DELETE -->
+
+                                    <a
+                                        href="{% url 'asset_delete' asset.id %}"
+                                        class="action-btn action-delete"
+                                    >
+
+                                        <span class="action-symbol">
+                                            🗑️
+                                        </span>
+
+                                        Delete
+
+                                    </a>
+
+
+                                <!-- =========================================
+                                     EMPLOYEE ACTION
+                                     ========================================= -->
+
+                                {% elif request.session.role == "employee" %}
+
+                                    {% if asset.assigned_employee %}
+
+                                        <a
+                                            href="{% url 'raise_ticket' asset.id %}"
+                                            class="action-btn action-ticket"
+                                        >
+
+                                            <span class="action-symbol">
+                                                🎫
+                                            </span>
+
+                                            Raise Ticket
+
+                                        </a>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                📦
+            </div>
+
+            <h3>
+                No assets found
+            </h3>
+
+            <p>
+                Try changing your search or filter.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+    </section>
+
+</div>
+
+{% endblock %}

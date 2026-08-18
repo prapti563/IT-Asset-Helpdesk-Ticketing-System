@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Assign Asset | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.assign-page {
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.assign-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.assign-header h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #0f172a;
+}
+
+.assign-header p {
+    margin-top: 7px;
+    color: #64748b;
+}
+
+.back-btn {
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.assign-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 12px 35px rgba(15,23,42,0.08);
+}
+
+.asset-summary {
+    background: linear-gradient(
+        135deg,
+        #eff6ff,
+        #f8fafc
+    );
+
+    border: 1px solid #dbeafe;
+    padding: 22px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+}
+
+.asset-summary small {
+    color: #64748b;
+    font-weight: 600;
+}
+
+.asset-summary h2 {
+    margin: 7px 0;
+    color: #0f172a;
+    font-size: 23px;
+}
+
+.asset-meta {
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+}
+
+textarea.form-control {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.assign-btn {
+    border: none;
+    padding: 13px 24px;
+    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        #16a34a,
+        #15803d
+    );
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.assign-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(22,163,74,0.22);
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@media (max-width: 700px) {
+
+    .assign-page {
+        margin: 25px auto;
+    }
+
+    .assign-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .assign-card {
+        padding: 20px;
+    }
+
+}
+
+</style>
+
+
+<div class="assign-page">
+
+    <!-- HEADER -->
+
+    <div class="assign-header">
+
+        <div>
+
+            <h1>Assign Asset</h1>
+
+            <p>
+                Assign this IT asset to an employee.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'asset_detail' asset.id %}"
+            class="back-btn"
+        >
+            ← Back
+        </a>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="assign-card">
+
+
+        <!-- ASSET SUMMARY -->
+
+        <div class="asset-summary">
+
+            <small>
+                SELECTED ASSET
+            </small>
+
+            <h2>
+                {{ asset.asset_name }}
+            </h2>
+
+            <div class="asset-meta">
+
+                {{ asset.asset_id }}
+                ·
+                {{ asset.brand }}
+
+            </div>
+
+            <span class="status-badge">
+
+                {{ asset.status }}
+
+            </span>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label>
+                    Select Employee
+                </label>
+
+                <select
+                    name="employee"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Choose employee
+                    </option>
+
+
+                    {% for employee in employees %}
+
+                        <option value="{{ employee.id }}">
+
+                            {{ employee.name }}
+                            —
+                            {{ employee.department }}
+
+                        </option>
+
+                    {% empty %}
+
+                        <option value="">
+                            No employees available
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Assignment Note
+                </label>
+
+                <textarea
+                    name="note"
+                    class="form-control"
+                    placeholder="Optional assignment note..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="assign-btn"
+            >
+                Assign Asset →
+            </button>
+
+
+        </form>
+
+
+        <div class="info-box">
+
+            💡 Once assigned, this asset will appear in the
+            selected employee's assigned assets list.
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

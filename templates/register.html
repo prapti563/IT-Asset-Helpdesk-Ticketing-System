@@ -1,0 +1,699 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create Account | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.register-page {
+    min-height: 78vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(circle at top left, #dbeafe 0, transparent 35%),
+        radial-gradient(circle at bottom right, #e0e7ff 0, transparent 35%),
+        #f8fafc;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 900px;
+    background: rgba(255,255,255,0.97);
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+    overflow: hidden;
+}
+
+.register-header {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: white;
+    padding: 32px;
+}
+
+.register-header h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+}
+
+.register-header p {
+    margin: 0;
+    color: #cbd5e1;
+}
+
+.register-body {
+    padding: 32px;
+}
+
+.form-section {
+    margin-bottom: 28px;
+}
+
+.form-section h3 {
+    margin-bottom: 18px;
+    color: #0f172a;
+    font-size: 18px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 11px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+}
+
+.role-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.role-option {
+    position: relative;
+}
+
+.role-option input {
+    display: none;
+}
+
+.role-label {
+    display: block;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    cursor: pointer;
+    background: #f8fafc;
+    transition: 0.2s;
+}
+
+.role-label strong {
+    display: block;
+    color: #0f172a;
+    margin-bottom: 5px;
+}
+
+.role-label span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.role-option input:checked + .role-label {
+    border-color: #2563eb;
+    background: #eff6ff;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+}
+
+.employee-fields {
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.login-link {
+    color: #475569;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.create-btn {
+    border: none;
+    padding: 13px 26px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.22);
+    transition: 0.2s;
+}
+
+.create-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 25px rgba(37,99,235,0.28);
+}
+
+.alert {
+    padding: 13px 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.alert-success {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+@media (max-width: 700px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-box {
+        grid-template-columns: 1fr;
+    }
+
+    .register-header,
+    .register-body {
+        padding: 24px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .create-btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        <!-- HEADER -->
+
+        <div class="register-header">
+
+            <h1>Create AssetFlow Account</h1>
+
+            <p>
+                Create an Employee or IT Support account to access the system.
+            </p>
+
+        </div>
+
+
+        <div class="register-body">
+
+
+            <!-- MESSAGES -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert
+                        {% if message.tags == 'error' %}
+                            alert-error
+                        {% else %}
+                            alert-success
+                        {% endif %}
+                    ">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- ========================= -->
+                <!-- ROLE -->
+                <!-- ========================= -->
+
+                <div class="form-section">
+
+                    <h3>
+                        01 — Select Account Type
+                    </h3>
+
+
+                    <div class="role-box">
+
+
+                        <!-- EMPLOYEE -->
+
+                        <div class="role-option">
+
+                            <input
+                                type="radio"
+                                name="role"
+                                id="employeeRole"
+                                value="employee"
+                                checked
+                                onchange="showEmployeeFields()"
+                            >
+
+                            <label
+                                for="employeeRole"
+                                class="role-label"
+                            >
+
+                                <strong>
+                                    👤 Employee
+                                </strong>
+
+                                <span>
+                                    View your assigned IT assets.
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- IT SUPPORT -->
+
+                        <div class="role-option">
+
+                            <input
+                                type="radio"
+                                name="role"
+                                id="supportRole"
+                                value="it_support"
+                                onchange="showEmployeeFields()"
+                            >
+
+                            <label
+                                for="supportRole"
+                                class="role-label"
+                            >
+
+                                <strong>
+                                    🛠 IT Support
+                                </strong>
+
+                                <span>
+                                    Manage employees and all assets.
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- ACCOUNT DETAILS -->
+                <!-- ========================= -->
+
+                <div class="form-section">
+
+                    <h3>
+                        02 — Account Details
+                    </h3>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- USERNAME
+                             ONLY FOR IT SUPPORT -->
+
+                        <div
+                            class="form-group"
+                            id="usernameField"
+                            style="display: none;"
+                        >
+
+                            <label>
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                id="usernameInput"
+                                placeholder="Enter username"
+                            >
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Create password"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="confirm_password"
+                                placeholder="Confirm password"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- EMPLOYEE INFORMATION -->
+                <!-- ========================= -->
+
+                <div
+                    class="employee-fields"
+                    id="employeeFields"
+                >
+
+                    <div class="form-section">
+
+                        <h3>
+                            03 — Employee Information
+                        </h3>
+
+
+                        <div class="form-grid">
+
+
+                            <!-- EMPLOYEE ID -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Employee ID
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="employee_id"
+                                    placeholder="Example: EMP-021"
+                                >
+
+                            </div>
+
+
+                            <!-- FULL NAME -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Enter full name"
+                                >
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="employee@example.com"
+                                >
+
+                            </div>
+
+
+                            <!-- PHONE -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    placeholder="Enter phone number"
+                                >
+
+                            </div>
+
+
+                            <!-- DEPARTMENT -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Department
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="department"
+                                    placeholder="Example: Computer Engineering"
+                                >
+
+                            </div>
+
+
+                            <!-- DESIGNATION -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Designation / Role
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="employee_role"
+                                    placeholder="Example: Software Engineer"
+                                >
+
+                            </div>
+
+
+                            <!-- JOINING DATE -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Joining Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    name="joining_date"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- ACTIONS -->
+                <!-- ========================= -->
+
+                <div class="form-actions">
+
+                    <div class="login-link">
+
+                        Already have an account?
+
+                        <a href="{% url 'login' %}">
+                            Login
+                        </a>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="create-btn"
+                    >
+                        Create Account →
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================= -->
+
+<script>
+
+function showEmployeeFields() {
+
+    const employeeRole =
+        document.getElementById("employeeRole");
+
+    const employeeFields =
+        document.getElementById("employeeFields");
+
+    const usernameField =
+        document.getElementById("usernameField");
+
+    const usernameInput =
+        document.getElementById("usernameInput");
+
+    const employeeInputs =
+        employeeFields.querySelectorAll("input");
+
+
+    /* =========================
+       EMPLOYEE
+       ========================= */
+
+    if (employeeRole.checked) {
+
+        employeeFields.style.display = "block";
+
+        usernameField.style.display = "none";
+
+        usernameInput.required = false;
+
+
+        employeeInputs.forEach(function(input) {
+
+            input.required = true;
+
+        });
+
+    }
+
+
+    /* =========================
+       IT SUPPORT
+       ========================= */
+
+    else {
+
+        employeeFields.style.display = "none";
+
+        usernameField.style.display = "block";
+
+        usernameInput.required = true;
+
+
+        employeeInputs.forEach(function(input) {
+
+            input.required = false;
+
+        });
+
+    }
+
+}
+
+
+/* Run when page first opens */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        showEmployeeFields();
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

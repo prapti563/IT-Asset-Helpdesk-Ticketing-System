@@ -1,0 +1,903 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if asset %}
+Edit Asset | AssetFlow
+{% else %}
+Add Asset | AssetFlow
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.page-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 10px 0 50px;
+}
+
+/* ================= HEADER ================= */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.22);
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 29px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.page-header p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* ================= BUTTON ================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 11px 18px;
+    border-radius: 11px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.btn-light {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-light:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.20);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.28);
+}
+
+/* ================= FORM CARD ================= */
+
+.form-card {
+    background: rgba(255,255,255,0.98);
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    padding: 34px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.07);
+}
+
+/* ================= SECTION ================= */
+
+.form-section {
+    margin-bottom: 28px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.section-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.section-subtitle {
+    margin: 0 0 22px 44px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ================= GRID ================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 2px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.required {
+    color: #ef4444;
+}
+
+/* ================= INPUT ================= */
+
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #dbe3ee;
+    border-radius: 11px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-control:hover {
+    border-color: #cbd5e1;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+textarea.form-control {
+    min-height: 115px;
+    resize: vertical;
+}
+
+/* ================= STATUS ================= */
+
+.status-wrapper {
+    position: relative;
+}
+
+.status-select {
+    font-weight: 700;
+}
+
+.status-hint {
+    display: none;
+    margin-top: 9px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.status-hint.show {
+    display: block;
+}
+
+.repair-icon {
+    font-size: 14px;
+}
+
+/* ================= DIVIDER ================= */
+
+.form-divider {
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        #e2e8f0,
+        transparent
+    );
+    margin: 32px 0;
+}
+
+/* ================= INFO BOX ================= */
+
+.info-box {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 13px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.info-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.info-box strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #334155;
+    font-size: 13px;
+}
+
+.info-box span {
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* ================= ACTIONS ================= */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 750px) {
+
+    .page-container {
+        padding: 5px 12px 35px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .header-left {
+        align-items: flex-start;
+    }
+
+    .header-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    .page-header h1 {
+        font-size: 23px;
+    }
+
+    .page-header p {
+        font-size: 12px;
+    }
+
+    .form-card {
+        padding: 22px;
+        border-radius: 18px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .section-subtitle {
+        margin-left: 0;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<div class="page-container">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                {% if asset %}
+                    ✏️
+                {% else %}
+                    +
+                {% endif %}
+            </div>
+
+            <div>
+                <h1>
+                    {% if asset %}
+                        Edit IT Asset
+                    {% else %}
+                        Add IT Asset
+                    {% endif %}
+                </h1>
+
+                <p>
+                    {% if asset %}
+                        Update asset information, status and assignment.
+                    {% else %}
+                        Register a new company-owned IT device.
+                    {% endif %}
+                </p>
+            </div>
+
+        </div>
+
+        <a href="{% url 'assets' %}" class="btn btn-light">
+            ← Back
+        </a>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <div class="form-card">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- ================= SECTION 1 ================= -->
+
+            <div class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        01
+                    </div>
+
+                    <div class="section-title">
+                        Basic Information
+                    </div>
+
+                </div>
+
+                <p class="section-subtitle">
+                    Enter the identification details of this IT asset.
+                </p>
+
+
+                <div class="form-grid">
+
+                    <!-- Asset Name -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Asset Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="asset_name"
+                            class="form-control"
+                            placeholder="ThinkPad X1 Carbon"
+                            value="{{ asset.asset_name|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Asset ID -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Asset ID
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="asset_id"
+                            class="form-control"
+                            placeholder="LAP-001"
+                            value="{{ asset.asset_id|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Asset Tag -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Asset Tag
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="asset_tag"
+                            class="form-control"
+                            placeholder="AST-0001"
+                            value="{{ asset.asset_tag|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Asset Type -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Asset Type
+                        </label>
+
+                        <select
+                            name="asset_type"
+                            class="form-control"
+                        >
+
+                            <option value="Laptop"
+                                {% if asset.asset_type == "Laptop" %}selected{% endif %}>
+                                💻 Laptop
+                            </option>
+
+                            <option value="Desktop"
+                                {% if asset.asset_type == "Desktop" %}selected{% endif %}>
+                                🖥️ Desktop
+                            </option>
+
+                            <option value="Monitor"
+                                {% if asset.asset_type == "Monitor" %}selected{% endif %}>
+                                🖥 Monitor
+                            </option>
+
+                            <option value="Printer"
+                                {% if asset.asset_type == "Printer" %}selected{% endif %}>
+                                🖨️ Printer
+                            </option>
+
+                            <option value="Phone"
+                                {% if asset.asset_type == "Phone" %}selected{% endif %}>
+                                📱 Phone
+                            </option>
+
+                            <option value="Tablet"
+                                {% if asset.asset_type == "Tablet" %}selected{% endif %}>
+                                📱 Tablet
+                            </option>
+
+                            <option value="Server"
+                                {% if asset.asset_type == "Server" %}selected{% endif %}>
+                                🗄️ Server
+                            </option>
+
+                            <option value="Keyboard"
+                                {% if asset.asset_type == "Keyboard" %}selected{% endif %}>
+                                ⌨️ Keyboard
+                            </option>
+
+                            <option value="Mouse"
+                                {% if asset.asset_type == "Mouse" %}selected{% endif %}>
+                                🖱️ Mouse
+                            </option>
+
+                            <option value="Other"
+                                {% if asset.asset_type == "Other" %}selected{% endif %}>
+                                📦 Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-divider"></div>
+
+
+            <!-- ================= SECTION 2 ================= -->
+
+            <div class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        02
+                    </div>
+
+                    <div class="section-title">
+                        Device Details
+                    </div>
+
+                </div>
+
+                <p class="section-subtitle">
+                    Add manufacturer, serial and purchase information.
+                </p>
+
+
+                <div class="form-grid">
+
+                    <!-- Brand -->
+
+                    <div class="form-group">
+
+                        <label>Brand</label>
+
+                        <input
+                            type="text"
+                            name="brand"
+                            class="form-control"
+                            placeholder="Lenovo"
+                            value="{{ asset.brand|default:'' }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Model -->
+
+                    <div class="form-group">
+
+                        <label>Model</label>
+
+                        <input
+                            type="text"
+                            name="model"
+                            class="form-control"
+                            placeholder="ThinkPad X1 Carbon"
+                            value="{{ asset.model|default:'' }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Serial Number -->
+
+                    <div class="form-group">
+
+                        <label>Serial Number</label>
+
+                        <input
+                            type="text"
+                            name="serial_number"
+                            class="form-control"
+                            placeholder="Enter serial number"
+                            value="{{ asset.serial_number|default:'' }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Purchase Date -->
+
+                    <div class="form-group">
+
+                        <label>Purchase Date</label>
+
+                        <input
+                            type="date"
+                            name="purchase_date"
+                            class="form-control"
+                            value="{{ asset.purchase_date|date:'Y-m-d' }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Price -->
+
+                    <div class="form-group">
+
+                        <label>Purchase Price</label>
+
+                        <input
+                            type="number"
+                            name="price"
+                            class="form-control"
+                            placeholder="95000"
+                            value="{{ asset.price|default:'' }}"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Asset Status
+                        </label>
+
+                        <div class="status-wrapper">
+
+                            <select
+                                name="status"
+                                id="assetStatus"
+                                class="form-control status-select"
+                            >
+
+                                <option value="Available"
+                                    {% if asset.status == "Available" %}selected{% endif %}>
+                                    🟢 Available
+                                </option>
+
+                                <option value="Assigned"
+                                    {% if asset.status == "Assigned" %}selected{% endif %}>
+                                    🔵 Assigned
+                                </option>
+
+                                <option value="Repair"
+                                    {% if asset.status == "Repair" %}selected{% endif %}>
+                                    🟠 Repair
+                                </option>
+
+                            </select>
+
+
+                            <div
+                                id="repairHint"
+                                class="status-hint"
+                            >
+                                <span class="repair-icon">🔧</span>
+                                This asset will be marked as
+                                <strong>Repair</strong>.
+                                The next backend step will record this
+                                as a real <strong>Sent for Repair</strong>
+                                activity.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Assigned Employee -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Assigned Employee
+                        </label>
+
+                        <select
+                            name="assigned_employee"
+                            class="form-control"
+                        >
+
+                            <option value="">
+                                -- Not Assigned --
+                            </option>
+
+                            {% for employee in employees %}
+
+                            <option
+                                value="{{ employee.id }}"
+                                {% if asset.assigned_employee.id == employee.id %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ employee.name }}
+                                {% if employee.employee_id %}
+                                    — {{ employee.employee_id }}
+                                {% endif %}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFO -->
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+                        ℹ️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Asset lifecycle tracking
+                        </strong>
+
+                        <span>
+                            Available → Assigned → Returned
+                            or Repair → Available.
+                            AssetFlow records important status changes
+                            as system activity.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-divider"></div>
+
+
+            <!-- ================= SECTION 3 ================= -->
+
+            <div class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        03
+                    </div>
+
+                    <div class="section-title">
+                        Additional Information
+                    </div>
+
+                </div>
+
+                <p class="section-subtitle">
+                    Add notes or useful information about this asset.
+                </p>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        class="form-control"
+                        placeholder="Enter asset description, condition, specifications or notes..."
+                    >{{ asset.description|default:'' }}</textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= ACTIONS ================= -->
+
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'assets' %}"
+                    class="btn btn-light"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    {% if asset %}
+                        ✓ Update Asset
+                    {% else %}
+                        + Save Asset
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= STATUS SCRIPT ================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const statusSelect = document.getElementById("assetStatus");
+    const repairHint = document.getElementById("repairHint");
+
+    function updateRepairHint() {
+
+        if (statusSelect.value === "Repair") {
+            repairHint.classList.add("show");
+        } else {
+            repairHint.classList.remove("show");
+        }
+
+    }
+
+    updateRepairHint();
+
+    statusSelect.addEventListener(
+        "change",
+        updateRepairHint
+    );
+
+});
+
+</script>
+
+{% endblock %}

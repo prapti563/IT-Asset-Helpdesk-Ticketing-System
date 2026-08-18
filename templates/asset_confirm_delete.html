@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Delete Asset | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.delete-page {
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: #f8fafc;
+}
+
+.delete-card {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+}
+
+.delete-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 30px;
+}
+
+.delete-card h1 {
+    margin: 0 0 10px;
+    color: #0f172a;
+    font-size: 26px;
+}
+
+.delete-card p {
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.asset-name {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.warning {
+    margin: 22px 0;
+    padding: 14px;
+    border-radius: 10px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #c2410c;
+    font-size: 13px;
+}
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
+}
+
+@media (max-width: 600px) {
+
+    .delete-card {
+        padding: 25px 20px;
+    }
+
+    .delete-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+}
+
+</style>
+
+
+<div class="delete-page">
+
+    <div class="delete-card">
+
+        <div class="delete-icon">
+            🗑️
+        </div>
+
+        <h1>
+            Delete Asset?
+        </h1>
+
+        <p>
+            Are you sure you want to permanently delete
+        </p>
+
+        <p class="asset-name">
+            {{ asset.asset_name }}
+        </p>
+
+        <div class="warning">
+            ⚠️ This action cannot be undone.
+            All information related to this asset will be removed.
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="delete-actions">
+
+                <a
+                    href="{% url 'assets' %}"
+                    class="btn cancel-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn delete-btn"
+                >
+                    Yes, Delete Asset
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
