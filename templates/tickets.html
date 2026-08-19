@@ -166,7 +166,10 @@
                         <th class="action-column">
                             Action
                         </th>
-
+                       
+                        <th>
+                            Comment
+                        </th>
                     </tr>
 
                 </thead>
@@ -177,6 +180,7 @@
                     {% for ticket in tickets %}
 
                     <tr>
+                    
 
                         <!-- =================================
                              TICKET ID
@@ -452,7 +456,23 @@
                             </form>
 
                         </td>
+                         <!--comment -->
+                        <td>
+                            <form method="POST" action="{% url 'add_ticket_comment' ticket.id %}">
+                                {% csrf_token %}
+                                <input type="text" name="comment" placeholder="Add a comment" required>
+                                <button type="submit">Submit</button>
+                            </form>
+                            {% for comment in ticket.comments.all %}
+                            <div style="margin-top: 8px; ">
+                                <strong>{{ comment.user.username }}:</strong> 
+                                <p style="margin: 2px 0;">{{ comment.comment }}</p>
+                            </div>                                          
 
+                            {% endfor %}
+
+                        </td>
+ 
                     </tr>
 
 
@@ -478,9 +498,10 @@
                             </p>
 
                         </td>
-
+                       
+   
                     </tr>
-
+                    
                     {% endfor %}
 
                 </tbody>

@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .models import Employee, Asset, Activity, Ticket
+from .models import Employee, Asset, Activity, Ticket, TicketComment
 
 
 # =========================
@@ -1642,3 +1642,28 @@ def delete_ticket(request, id):
             "ticket": ticket
         }
     )
+def add_ticket_comment(request, id):
+    
+    if not request.user.is_authenticated:
+        return redirect("login")
+        
+
+    ticket = get_object_or_404(
+        Ticket,
+        id=id
+    )
+
+    if request.method == "POST":
+
+        comment_text = request.POST.get("comment")
+
+        if comment_text:
+            TicketComment.objects.create(
+                ticket=ticket,
+                user=request.user,
+                comment=comment_text
+            )
+
+        return redirect("tickets")
+
+    return redirect("tickets")

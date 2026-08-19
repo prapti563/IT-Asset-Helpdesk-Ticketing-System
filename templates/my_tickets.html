@@ -970,6 +970,21 @@ My Tickets | AssetFlow
                             </span>
 
                         </td>
+                        <!-- COMMENT -->                
+                        <td>
+
+                            <form method="POST" action="{% url 'add_ticket_comment' ticket.id %}">
+                                {% csrf_token %}
+                                <input type="text" name="comment" placeholder="Add a comment" required>
+                                <button type="submit">Submit</button>
+                            </form>
+                            {% for comment in ticket.comments.all %}
+                            <div style="margin-top: 8px; ">
+                                <strong>{{ comment.user.username }}:</strong> 
+                                <p style="margin: 2px 0;">{{ comment.comment }}</p>
+                            </div>                                          
+                            {% endfor %}
+                            
 
                     </tr>
 

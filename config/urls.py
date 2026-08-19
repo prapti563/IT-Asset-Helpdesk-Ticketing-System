@@ -168,6 +168,14 @@ path(
     views.delete_ticket,
     name="delete_ticket"
 ),
-
-
+path(
+    "tickets/<int:id>/delete/",
+    views.delete_ticket,
+    name="delete_ticket"
+),
+path(
+    "tickets/<int:id>/comment/",
+    views.add_ticket_comment,
+    name="add_ticket_comment"
+),
 ]
