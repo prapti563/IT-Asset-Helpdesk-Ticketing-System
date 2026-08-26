@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from asset import views
 
 
@@ -178,4 +180,9 @@ path(
     views.add_ticket_comment,
     name="add_ticket_comment"
 ),
-]
+path(
+    "assets/import-csv/",
+    views.import_assets_csv,
+    name="import_assets_csv"
+),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

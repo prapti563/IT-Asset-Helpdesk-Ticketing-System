@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Import Assets | AssetFlow
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        background-color: #fff;
+    }
+    
+    .instruction-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .instruction-card h3 {
+        margin-bottom: 10px;
+        color: #1e293b;
+        font-size: 16px;
+    }
+    
+    .instruction-card ul {
+        padding-left: 20px;
+        font-size: 13.5px;
+        color: #475569;
+        line-height: 1.7;
+    }
+    
+    .btn-light {
+        background-color: #f3f4f6;
+        color: #374151;
+        border: 1px solid #d1d5db;
+    }
+    
+    .btn-light:hover {
+        background-color: #e5e7eb;
+    }
+    
+    .messages-list {
+        margin-bottom: 20px;
+        list-style: none;
+    }
+    
+    .message-item {
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 13.5px;
+        margin-bottom: 10px;
+        font-weight: 550;
+    }
+    
+    .message-error {
+        background-color: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+    }
+    
+    .message-success {
+        background-color: #f0fdf4;
+        color: #166534;
+        border: 1px solid #86efac;
+    }
+</style>
+
+<div class="page-container">
+
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+
+        <div>
+            <h1 style="font-size: 28px; font-weight: 800; color: #0f172a;">Bulk Import Assets</h1>
+            <p style="color: #64748b; font-size: 14px;">Add multiple hardware assets to the database simultaneously using a CSV file.</p>
+        </div>
+
+        <a href="{% url 'assets' %}" class="btn btn-light">
+            ← Back to Assets
+        </a>
+
+    </div>
+
+    <!-- MESSAGES -->
+    {% if messages %}
+    <ul class="messages-list">
+        {% for message in messages %}
+        <li class="message-item {% if message.tags == 'error' %}message-error{% else %}message-success{% endif %}">
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- INSTRUCTIONS -->
+    <div class="instruction-card">
+        <h3>📋 CSV Format Instructions</h3>
+        <p style="font-size: 13.5px; color: #475569; margin-bottom: 10px;">Your CSV file must include a header row with the following column names exactly:</p>
+        <ul>
+            <li><strong>asset_name</strong>: Name of the asset (e.g., Lenovo ThinkPad X1)</li>
+            <li><strong>asset_id</strong>: Unique identifier (e.g., LP-00125)</li>
+            <li><strong>asset_tag</strong>: Unique barcode tag (e.g., TAG-8812)</li>
+            <li><strong>asset_type</strong>: Type of asset. Valid types: <code>Laptop</code>, <code>Desktop</code>, <code>Monitor</code>, <code>Printer</code>, <code>Phone</code>, <code>Server</code>, <code>Tablet</code>, <code>Keyboard</code>, <code>Mouse</code>, <code>Other</code></li>
+            <li><strong>brand</strong>: Manufacturer brand (e.g., Lenovo)</li>
+            <li><strong>model</strong>: Model name or number (e.g., X1 Carbon)</li>
+            <li><strong>serial_number</strong>: Unique hardware serial number</li>
+            <li><strong>purchase_date</strong>: Format must be <code>YYYY-MM-DD</code> (e.g., 2026-08-26)</li>
+            <li><strong>price</strong>: Numeric value of the purchase price (e.g., 1200.50)</li>
+            <li><strong>description</strong>: (Optional) Any extra notes or description</li>
+        </ul>
+        <p style="font-size: 12px; color: #dc2626; margin-top: 12px; font-weight: 600;">⚠️ Note: The CSV import runs inside a database transaction. If any row has validation errors (e.g. duplicate IDs or wrong date formats), all insertions will be rolled back so no partial data is saved.</p>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-card">
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+
+                <label style="display: block; font-weight: 700; margin-bottom: 8px; color: #1e293b;">Select CSV File</label>
+
+                <input
+                    type="file"
+                    name="csv_file"
+                    class="form-control"
+                    accept=".csv"
+                    required
+                >
+
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 25px;">
+
+                <button type="submit" class="btn btn-primary" style="padding: 12px 20px;">
+                    📤 Upload & Import
+                </button>
+
+                <a href="{% url 'assets' %}" class="btn btn-light" style="padding: 12px 20px;">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

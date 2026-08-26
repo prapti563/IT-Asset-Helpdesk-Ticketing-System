@@ -2,8 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Employee(models.Model):
+# ==========================================
+# V1: ASSET MANAGEMENT SCHEMAS & ROLES
+# ==========================================
 
+class Employee(models.Model):
     employee_id = models.CharField(
         max_length=20,
         unique=True
@@ -141,6 +144,7 @@ class Activity(models.Model):
 
         ("Login", "Login"),
         ("Logout", "Logout"),
+        ("SLA Escalation", "SLA Escalation"),
     ]
 
     employee = models.ForeignKey(
@@ -192,6 +196,10 @@ class Activity(models.Model):
             target = "System"
 
         return f"{self.action} - {target}"
+
+# ==========================================
+# V2: TICKETING CORE
+# ==========================================
 
 class Ticket(models.Model):
 
@@ -256,12 +264,25 @@ class Ticket(models.Model):
         default="Open"
     )
 
+    # V3: Ticket assignment logic
     assigned_to = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="assigned_tickets"
+    )
+
+    # V4: Ticket media uploads
+    screenshot = models.ImageField(
+        upload_to="ticket_screenshots/",
+        blank=True,
+        null=True
+    )
+
+    # V5: SLA monitoring & automatic escalation flag
+    is_escalated = models.BooleanField(
+        default=False
     )
 
     created_at = models.DateTimeField(
@@ -274,6 +295,12 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"{self.ticket_id} - {self.title}"
+
+
+# ==========================================
+# V3: TICKET COMMENTS DIALOGUE
+# ==========================================
+
 class TicketComment(models.Model):
     ticket = models.ForeignKey(
         Ticket,

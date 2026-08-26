@@ -806,13 +806,27 @@ My Tickets | AssetFlow
 
                         <td>
 
-                            <div class="ticket-id">
+                            <div class="ticket-id" style="display: flex; align-items: center; gap: 6px;">
                                 {{ ticket.ticket_id }}
+
+                                {% if ticket.is_escalated %}
+                                <span style="background-color: #ffecec; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; padding: 2px 6px; font-size: 9px; font-weight: 800; white-space: nowrap;">
+                                    🚨 SLA Escalated
+                                </span>
+                                {% endif %}
                             </div>
 
                             <div class="ticket-title">
                                 {{ ticket.title }}
                             </div>
+
+                            {% if ticket.screenshot %}
+                            <div style="margin-top: 6px;">
+                                <a href="{{ ticket.screenshot.url }}" target="_blank" style="color: var(--primary); font-size: 11px; font-weight: 700; text-decoration: underline;">
+                                    🖼️ View Screenshot
+                                </a>
+                            </div>
+                            {% endif %}
 
                         </td>
 
@@ -968,6 +982,10 @@ My Tickets | AssetFlow
                                 {{ ticket.created_at|date:"d M Y" }}
 
                             </span>
+
+                            <small style="color: #8b95a5; font-weight: 700; display: block; margin-top: 4px; font-size: 11px;">
+                                Age: {{ ticket.created_at|timesince }}
+                            </small>
 
                         </td>
                         <!-- COMMENT -->                

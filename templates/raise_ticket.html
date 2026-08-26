@@ -709,8 +709,8 @@ Raise Support Ticket | AssetFlow
                 <form
                     method="POST"
                     action="{% url 'raise_ticket' asset.id %}"
+                    enctype="multipart/form-data"
                 >
-
                     {% csrf_token %}
 
 
@@ -843,7 +843,22 @@ Raise Support Ticket | AssetFlow
 
                     </div>
 
+                    <!-- SCREENSHOT -->
+                    <div class="form-group" style="margin-top: 20px;">
 
+                        <label class="form-label">
+                            Screenshot (Optional)
+                        </label>
+
+                        <input
+                            type="file"
+                            name="screenshot"
+                            class="form-input"
+                            accept="image/*"
+                            style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; width: 100%; background-color: #fff;"
+                        >
+
+                    </div>
 
                     <!-- BUTTONS -->
 

@@ -3,6 +3,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import transaction
+from django.utils import timezone
+from datetime import datetime, timedelta
+import csv
+import io
 
 from .models import Employee, Asset, Activity, Ticket, TicketComment
 
@@ -376,6 +381,9 @@ def dashboard(request):
     if role not in ["employee", "it_support"]:
         return redirect("login")
 
+    # Run SLA Escalation check
+    check_and_escalate_tickets()
+
     # =========================
     # EXISTING DASHBOARD LOGIC
     # =========================
@@ -411,6 +419,14 @@ def dashboard(request):
         if total_assets else 0
     )
 
+    # Ticket SLA metrics
+    total_tickets = Ticket.objects.count()
+    open_tickets = Ticket.objects.filter(status="Open").count()
+    progress_tickets = Ticket.objects.filter(status="In Progress").count()
+    resolved_tickets = Ticket.objects.filter(status="Resolved").count()
+    closed_tickets = Ticket.objects.filter(status="Closed").count()
+    escalated_tickets = Ticket.objects.filter(is_escalated=True).count()
+
     context = {
         "total_employees": total_employees,
         "total_assets": total_assets,
@@ -420,6 +436,12 @@ def dashboard(request):
         "assigned_percentage": assigned_percentage,
         "available_percentage": available_percentage,
         "repair_percentage": repair_percentage,
+        "total_tickets": total_tickets,
+        "open_tickets": open_tickets,
+        "progress_tickets": progress_tickets,
+        "resolved_tickets": resolved_tickets,
+        "closed_tickets": closed_tickets,
+        "escalated_tickets": escalated_tickets,
     }
 
     return render(
@@ -1406,6 +1428,8 @@ def raise_ticket(request, id):
 
         ticket_id = f"TKT{ticket_number:04d}"
 
+        screenshot = request.FILES.get("screenshot")
+
         # ======================================
         # SAVE TICKET
         # ======================================
@@ -1418,7 +1442,8 @@ def raise_ticket(request, id):
             description=description,
             category=category,
             priority=priority,
-            status="Open"
+            status="Open",
+            screenshot=screenshot
         )
 
         # ======================================
@@ -1451,6 +1476,9 @@ def my_tickets(request):
 
     if request.session.get("role") != "employee":
         return redirect("assets")
+
+    # Run SLA Escalation check
+    check_and_escalate_tickets()
 
     employee_id = request.session.get("employee_id")
 
@@ -1505,6 +1533,9 @@ def tickets(request):
 
     if request.session.get("role") != "it_support":
         return redirect("dashboard")
+
+    # Run SLA Escalation check
+    check_and_escalate_tickets()
 
     tickets = Ticket.objects.select_related(
         "employee",
@@ -1642,6 +1673,12 @@ def delete_ticket(request, id):
             "ticket": ticket
         }
     )
+
+
+# ==========================================
+# V3: AGENT ASSIGNMENT & TICKET DIALOGUE
+# ==========================================
+
 def add_ticket_comment(request, id):
     
     if not request.user.is_authenticated:
@@ -1667,3 +1704,180 @@ def add_ticket_comment(request, id):
         return redirect("tickets")
 
     return redirect("tickets")
+
+
+# ==========================================
+# V5: SLA MONITORING & AUTOMATIC ESCALATION
+# ==========================================
+
+def check_and_escalate_tickets():
+    now = timezone.now()
+    cutoff = now - timedelta(hours=24)
+
+    # Unresolved tickets with High or Critical priority open for 24+ hours
+    overdue_tickets = Ticket.objects.filter(
+        status__in=["Open", "In Progress"],
+        priority__in=["High", "Critical"],
+        created_at__lte=cutoff,
+        is_escalated=False
+    )
+
+    if overdue_tickets.exists():
+        # Get or create the IT Manager user
+        it_manager, created = User.objects.get_or_create(
+            username="it_manager",
+            defaults={
+                "email": "it_manager@company.com",
+                "is_staff": True
+            }
+        )
+        if created:
+            it_manager.set_password("managerpassword")
+            it_manager.save()
+
+        for ticket in overdue_tickets:
+            ticket.is_escalated = True
+            ticket.assigned_to = it_manager
+            ticket.save()
+
+            # Log SLA Escalation activity
+            Activity.objects.create(
+                asset=ticket.asset,
+                employee=ticket.employee,
+                action="SLA Escalation",
+                description=f"Ticket {ticket.ticket_id} ('{ticket.title}') automatically escalated to IT Manager (unresolved for 24+ hours)."
+            )
+
+
+# ==========================================
+# V4: MEDIA & BULK CSV UPLOAD ACTIONS
+# ==========================================
+
+def import_assets_csv(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    if request.session.get("role") != "it_support":
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        csv_file = request.FILES.get("csv_file")
+        if not csv_file:
+            messages.error(request, "Please upload a CSV file.")
+            return render(request, "import_assets_csv.html")
+
+        if not csv_file.name.endswith(".csv"):
+            messages.error(request, "Uploaded file is not a CSV.")
+            return render(request, "import_assets_csv.html")
+
+        try:
+            data_set = csv_file.read().decode('utf-8-sig')
+            io_string = io.StringIO(data_set)
+            reader = csv.DictReader(io_string)
+
+            required_cols = [
+                'asset_name', 'asset_id', 'asset_tag', 'asset_type',
+                'brand', 'model', 'serial_number', 'purchase_date', 'price'
+            ]
+
+            if not reader.fieldnames:
+                messages.error(request, "The CSV file is empty.")
+                return render(request, "import_assets_csv.html")
+
+            headers = [h.strip() for h in reader.fieldnames]
+            missing_cols = [col for col in required_cols if col not in headers]
+            if missing_cols:
+                messages.error(request, f"Missing columns in CSV: {', '.join(missing_cols)}")
+                return render(request, "import_assets_csv.html")
+
+            imported_count = 0
+            errors = []
+
+            with transaction.atomic():
+                for row_idx, row in enumerate(reader, start=1):
+                    row = {k.strip(): v.strip() for k, v in row.items() if k}
+
+                    asset_name = row.get("asset_name")
+                    asset_id = row.get("asset_id")
+                    asset_tag = row.get("asset_tag")
+                    asset_type = row.get("asset_type")
+                    brand = row.get("brand")
+                    model = row.get("model", "")
+                    serial_number = row.get("serial_number")
+                    purchase_date_str = row.get("purchase_date")
+                    price_str = row.get("price")
+                    description = row.get("description", "")
+
+                    if not all([asset_name, asset_id, asset_tag, asset_type, brand, serial_number, purchase_date_str, price_str]):
+                        errors.append(f"Row {row_idx}: Missing required fields.")
+                        continue
+
+                    # Validate duplicate IDs
+                    if Asset.objects.filter(asset_id=asset_id).exists():
+                        errors.append(f"Row {row_idx}: Asset ID '{asset_id}' already exists.")
+                        continue
+                    if Asset.objects.filter(asset_tag=asset_tag).exists():
+                        errors.append(f"Row {row_idx}: Asset Tag '{asset_tag}' already exists.")
+                        continue
+                    if Asset.objects.filter(serial_number=serial_number).exists():
+                        errors.append(f"Row {row_idx}: Serial Number '{serial_number}' already exists.")
+                        continue
+
+                    # Validate date
+                    try:
+                        purchase_date = datetime.strptime(purchase_date_str, "%Y-%m-%d").date()
+                    except ValueError:
+                        errors.append(f"Row {row_idx}: Invalid date format for '{purchase_date_str}'. Use YYYY-MM-DD.")
+                        continue
+
+                    # Validate price
+                    try:
+                        price = float(price_str)
+                    except ValueError:
+                        errors.append(f"Row {row_idx}: Invalid price value '{price_str}'.")
+                        continue
+
+                    # Validate type choices
+                    valid_types = [t[0] for t in Asset.ASSET_TYPES]
+                    if asset_type not in valid_types:
+                        errors.append(f"Row {row_idx}: Invalid asset type '{asset_type}'. Valid options are: {', '.join(valid_types)}.")
+                        continue
+
+                    # Create asset
+                    asset = Asset.objects.create(
+                        asset_name=asset_name,
+                        asset_id=asset_id,
+                        asset_tag=asset_tag,
+                        asset_type=asset_type,
+                        brand=brand,
+                        model=model,
+                        serial_number=serial_number,
+                        purchase_date=purchase_date,
+                        price=price,
+                        description=description,
+                        status="Available"
+                    )
+
+                    # Create Activity
+                    Activity.objects.create(
+                        asset=asset,
+                        action="Asset Added",
+                        description=f"Asset {asset.asset_id} ({asset.asset_name}) was added via CSV bulk import.",
+                        performed_by=request.user
+                    )
+                    imported_count += 1
+
+                if errors:
+                    transaction.set_rollback(True)
+                    for err in errors:
+                        messages.error(request, err)
+                    return render(request, "import_assets_csv.html")
+
+            messages.success(request, f"Successfully imported {imported_count} assets.")
+            return redirect("assets")
+
+        except Exception as e:
+            messages.error(request, f"Error processing file: {str(e)}")
+            return render(request, "import_assets_csv.html")
+
+    return render(request, "import_assets_csv.html")
