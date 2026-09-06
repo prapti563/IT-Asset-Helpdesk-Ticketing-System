@@ -4,7 +4,7 @@ A Django-based web application for managing IT assets and handling employee help
 
 ## 🚀 Live Website
 
-[Visit Live Website](https://it-asset-helpdesk-ticketing-system.onrender.com)
+https://it-asset-helpdesk-ticketing-system.onrender.com
 
 ## ✨ Features
 
@@ -34,20 +34,4 @@ Open → In Progress → Resolved → Closed
 - Git & GitHub
 - Render
 
-## 📂 Project Structure
 
-IT-Asset-Helpdesk-Ticketing-System/
-│
-├── asset/
-├── config/
-├── templates/
-├── media/
-├── manage.py
-├── requirements.txt
-└── README.md
-
-
-## 🚀 Live Demo
-
-🌐 **Live Website:**  
-https://it-asset-helpdesk-ticketing-system.onrender.com
